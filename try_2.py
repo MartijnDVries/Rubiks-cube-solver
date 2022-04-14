@@ -1,4 +1,5 @@
 from ursina import *
+import math
 
 class Rubiks(Entity):
     def __init__(self, front_color=color.black, back_color= color.black, left_color=color.black, right_color=color.black, top_color=color.black, bottom_color=color.black, position=None):
@@ -17,12 +18,6 @@ class Rubiks(Entity):
 
     def ColorCube(self):
         e = Entity()
-        # Entity(parent=e, model="quad",color=bottom_color, x=0, y=-0.5, z=0.5, rotation_x=-90)
-        # Entity(parent=e, model="quad", color=top_color, x=0, y=0.5, z=0.5, rotation_x=90)
-        # Entity(parent=e, model="quad",color=front_color, x=0, y=0, z=0)
-        # Entity(parent=e, model="quad", color=back_color, x=0, y=0, z=1, rotation_x=180)
-        # Entity(parent=e, model="quad", color=left_color, x=-0.5, y=0, z=0.5, rotation_y=90)
-        # Entity(parent=e, model="quad", color=right_color, x=0.5, y=0, z=0.5, rotation_y=-90)
 
         Entity(parent=e, model="quad",color=self.bottom_color, x=0, y=-0.5, z=0, rotation_x=-90)
         Entity(parent=e, model="quad", color=self.top_color, x=0, y=0.5, z=0, rotation_x=90)
@@ -522,17 +517,421 @@ def turn_back_left(cube_list, pos_list):
             cube.left_color = org_bottom_color
             cube.model = cube.ColorCube()
 
+# Orange side is the left-hand side
+def turn_left_right(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,0,2]:
+            cube.position = pos_list[0,2,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,1]:
+            cube.position = pos_list[0,1,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,0]:
+            cube.position = pos_list[0,0,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,1,2]:
+            cube.position = pos_list[0,2,1]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,1,0]:
+            cube.position = pos_list[0,0,1]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,2]:
+            cube.position = pos_list[0,2,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,1]:
+            cube.position = pos_list[0,1,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,0]:
+            cube.position = pos_list[0,0,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.front_color
+            cube.front_color = cube.top_color
+            cube.top_color = cube.back_color
+            cube.back_color = org_bottom_color
+            cube.model = cube.ColorCube()
+
+def turn_left_left(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,0,2]:
+            cube.position = pos_list[0,0,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,1]:
+            cube.position = pos_list[0,1,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,0]:
+            cube.position = pos_list[0,2,0]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,1,2]:
+            cube.position = pos_list[0,0,1]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,1,0]:
+            cube.position = pos_list[0,2,1]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,2]:
+            cube.position = pos_list[0,0,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,1]:
+            cube.position = pos_list[0,1,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,0]:
+            cube.position = pos_list[0,2,2]
+            org_bottom_color = cube.bottom_color
+            cube.bottom_color = cube.back_color
+            cube.back_color = cube.top_color
+            cube.top_color = cube.front_color
+            cube.front_color = org_bottom_color
+            cube.model = cube.ColorCube()
+
+# White side is top side
+
+def turn_top_right(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,2,0]:
+            cube.position = pos_list[0,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,1]:
+            cube.position = pos_list[1,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,2]:
+            cube.position = pos_list[2,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,2,0]:
+            cube.position = pos_list[0,2,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,2,2]:
+            cube.position = pos_list[2,2,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,0]:
+            cube.position = pos_list[0,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,1]:
+            cube.position = pos_list[1,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,2]:
+            cube.position = pos_list[2,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+
+def turn_top_left(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,2,0]:
+            cube.position = pos_list[2,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,2,0]:
+            cube.position = pos_list[2,2,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,0]:
+            cube.position = pos_list[2,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,1]:
+            cube.position = pos_list[1,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,1]:
+            cube.position  = pos_list[1,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,2,2]:
+            cube.position = pos_list[0,2,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,2,2]:
+            cube.position = pos_list[0,2,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,2,2]:
+            cube.position = pos_list[0,2,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+
+# Yellow side is bottom side
+
+def turn_bottom_right(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,0,0]:
+            cube.position = pos_list[2,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,0,0]:
+            cube.position  = pos_list[2,0,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,0,0]:
+            cube.position = pos_list[2,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,1]:
+            cube.position = pos_list[1,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,0,1]:
+            cube.position = pos_list[1,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,2]:
+            cube.position = pos_list[0,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,0,2]:
+            cube.position = pos_list[0,0,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,0,2]:
+            cube.position = pos_list[0,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.left_color
+            cube.left_color = cube.back_color
+            cube.back_color = cube.right_color
+            cube.right_color = org_front_color
+            cube.model = cube.ColorCube()
+
+def turn_bottom_left(cube_list, pos_list):
+    for cube in cube_list:
+        if cube.position == pos_list[0,0,0]:
+            cube.position = pos_list[0,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,0,0]:
+            cube.position = pos_list[0,0,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position  == pos_list[2,0,0]:
+            cube.position = pos_list[0,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position  == pos_list[0,0,1]:
+            cube.position = pos_list[1,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,0,1]:
+            cube.position = pos_list[1,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[0,0,2]:
+            cube.position = pos_list[2,0,2]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[1,0,2]:
+            cube.position = pos_list[2,0,1]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+        elif cube.position == pos_list[2,0,2]:
+            cube.position = pos_list[2,0,0]
+            org_front_color = cube.front_color
+            cube.front_color = cube.right_color
+            cube.right_color = cube.back_color
+            cube.back_color = cube.left_color
+            cube.left_color = org_front_color
+            cube.model = cube.ColorCube()
+
+
+
 
 
 app = Ursina()
 f = Facing()
 pos_list = make_positions_list()
 cube_list = set_cube(pos_list)
-
-
-
-
-
 
 def set_camera():
     camera.position = (0 , 0)
@@ -543,13 +942,18 @@ def update():
 
 def input(key):
     if key == '6':
-        print(f"facing side is {f.facing_side}")
         if f.facing_side == "green":
             turn_front_right(cube_list, pos_list)
         elif f.facing_side == "red":
             turn_right_right(cube_list, pos_list)
         elif f.facing_side == "blue":
             turn_back_right(cube_list, pos_list)
+        elif f.facing_side == "orange":
+            turn_left_right(cube_list, pos_list)
+        elif f.facing_side == "white":
+            turn_top_right(cube_list, pos_list)
+        elif f.facing_side == "yellow":
+            turn_bottom_right(cube_list, pos_list)
 
     elif key == '4':
         if f.facing_side == "green":
@@ -558,10 +962,68 @@ def input(key):
             turn_right_left(cube_list, pos_list)
         elif f.facing_side == "blue":
             turn_back_left(cube_list, pos_list)
+        elif f.facing_side == "orange":
+            turn_left_left(cube_list, pos_list)
+        elif f.facing_side == "white":
+            turn_top_left(cube_list, pos_list)
+        elif f.facing_side == "yellow":
+            turn_bottom_left(cube_list, pos_list)
 
+    elif key == '9':
+        if f.facing_side == "green" \
+                or f.facing_side == "orange" \
+                or f.facing_side == "blue" \
+                or f.facing_side == "red":
+            turn_top_right(cube_list, pos_list)
 
+    elif key == "7":
+        if f.facing_side == "green" \
+                or f.facing_side == "orange" \
+                or f.facing_side == "blue" \
+                or f.facing_side == "red":
+            turn_top_left(cube_list, pos_list)
 
+    elif key == "3":
+        if f.facing_side == "green" \
+                or f.facing_side == "orange" \
+                or f.facing_side == "blue" \
+                or f.facing_side == "red":
+            turn_bottom_right(cube_list, pos_list)
 
+    elif key == "1":
+        if f.facing_side == "green" \
+                or f.facing_side == "orange" \
+                or f.facing_side == "blue" \
+                or f.facing_side == "red":
+            turn_bottom_left(cube_list, pos_list)
+
+    elif key == "r":
+        for i in range(random.randint(75, 100)):
+            rando = random.randint(1, 12)
+            if rando == 1:
+                turn_front_left(cube_list, pos_list)
+            elif rando == 2:
+                turn_front_right(cube_list, pos_list)
+            elif rando == 3:
+                turn_left_right(cube_list, pos_list)
+            elif rando == 4:
+                turn_left_left(cube_list, pos_list)
+            elif rando == 5:
+                turn_right_right(cube_list, pos_list)
+            elif rando == 6:
+                turn_right_left(cube_list, pos_list)
+            elif rando == 7:
+                turn_back_left(cube_list, pos_list)
+            elif rando == 8:
+                turn_back_right(cube_list, pos_list)
+            elif rando == 9:
+                turn_top_right(cube_list, pos_list)
+            elif rando == 10:
+                turn_top_left(cube_list, pos_list)
+            elif rando == 11:
+                turn_bottom_left(cube_list, pos_list)
+            elif rando == 12:
+                turn_bottom_right(cube_list, pos_list)
 
 set_camera()
 EditorCamera()
