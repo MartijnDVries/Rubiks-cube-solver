@@ -117,7 +117,7 @@ def set_cube(pos_list):
 
     return cube_list
     
-# Front side is the green side
+# Front side is the green side.
 def turn_front_right(cube_list, pos_list):
     for cube in cube_list:
         if cube.position == pos_list[0,0,0]:
