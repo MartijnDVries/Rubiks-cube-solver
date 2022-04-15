@@ -64,6 +64,675 @@ class Facing:
 
         # print(self.facing_side)
 
+class Solver:
+    def __init__(self):
+        self.solved = False
+        self.direction_list = list()
+        self.white_edge_left = False
+        self.white_edge_front = False
+        self.white_edge_right = False
+        self.white_edge_back =  False
+        self.white_edges_solved = False
+        self.cube_solved = False
+
+    def reset_solver(self):
+        self.white_edge_left = False
+        self.white_edge_front = False
+        self.white_edge_right = False
+        self.white_edge_back =  False
+        self.white_edges_solved = False
+        self.cube_solved = False
+
+    def solve_cube(self, cube_list, pos_list):
+        if not self.white_edges_solved:
+            self.solve_white_edges(cube_list, pos_list)
+            return self.direction_list
+        if self.white_edges_solved:
+            self.solve_white_corners(cube_list, pos_list)
+
+        #
+        # if not self.cube_solved:
+        #     return self.direction_list
+
+    def solve_white_edges(self, cube_list, pos_list):
+        self.direction_list = list()
+        for cube in cube_list:
+            # First we check the left side of the cube
+                # left top
+            if cube.position == pos_list[0,2,1]:
+                if cube.top_color == color.white:
+                    if cube.left_color == color.orange:
+                        self.white_edge_left = True
+                    elif cube.left_color == color.red \
+                        or cube.left_color == color.blue \
+                        or cube.left_color == color.green:
+                        directions = ["turn_left_left",
+                                      "turn_left_left",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                elif cube.left_color == color.white:
+                    if cube.top_color == color.orange:
+                        directions = ["turn_left_right",
+                                      "turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_right",
+                                      "turn_left_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.top_color == color.red \
+                            or cube.top_color == color.blue \
+                            or cube.top_color == color.green:
+                        directions = ["turn_left_right",
+                                      "turn_left_right",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                # left back
+            if cube.position == pos_list[0,1,2]:
+                if cube.back_color == color.white:
+                    if cube.left_color == color.orange:
+                        directions = ["turn_left_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.left_color == color.red \
+                            or cube.left_color == color.green:
+                        directions = ["turn_back_right",
+                                      "turn_bottom_right",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.left_color == color.blue:
+                        directions = ["turn_left_left",
+                                      "turn_bottom_left",
+                                      "turn_left_right",
+                                      "turn_back_right",
+                                      "turn_back_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                elif cube.left_color == color.white:
+                    if cube.back_color == color.orange:
+                        directions = ["turn_back_right",
+                                      "turn_bottom_right",
+                                      "turn_back_left",
+                                      "turn_left_right",
+                                      "turn_left_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.back_color == color.red \
+                            or cube.back_color == color.green:
+                        directions = ["turn_back_right",
+                                      "turn_bottom_right",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.back_color == color.blue:
+                        directions = ["turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                # left front
+            if cube.position == pos_list[0,1,0]:
+                if cube.front_color == color.white:
+                    if cube.left_color == color.orange:
+                        directions = ["turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.left_color == color.red \
+                            or cube.left_color == color.blue:
+                        directions = ["turn_front_left",
+                                      "turn_bottom_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.left_color == color.green:
+                        directions = ["turn_left_right",
+                                      "turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                elif cube.left_color == color.white:
+                    if cube.front_color == color.orange:
+                        directions = ["turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_right",
+                                      "turn_left_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.front_color == color.red \
+                            or cube.front_color == color.blue:
+                        directions = ["turn_front_left",
+                                      "turn_bottom_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.front_color == color.green:
+                        directions = ["turn_front_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                # front top
+            if cube.position == pos_list[1,2,0]:
+                if cube.top_color == color.white:
+                    if cube.front_color == color.green:
+                        self.white_edge_front = True
+                    elif cube.front_color == color.red \
+                            or cube.front_color == color.blue \
+                            or cube.front_color == color.orange:
+                        directions = ["turn_front_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                elif cube.front_color == color.white:
+                    if cube.top_color == color.green:
+                        directions = ["turn_front_right",
+                                      "turn_right_left",
+                                      "turn_bottom_right",
+                                      "turn_right_right",
+                                      "turn_front_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.top_color == color.red \
+                            or cube.top_color == color.blue \
+                            or cube.top_color == color.orange:
+                        directions = ["turn_front_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                # Front right edge
+            if cube.position == pos_list[2,1,0]:
+                if cube.right_color == color.white:
+                    if cube.front_color == color.green:
+                        directions = ["turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.front_color == color.orange \
+                            or cube.front_color == color.blue:
+                        directions = ["turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.front_color == color.red:
+                        directions = ["turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                elif cube.front_color == color.white:
+                    if cube.right_color == color.green:
+                        directions = ["turn_right_left",
+                                      "turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.right_color == color.red:
+                        directions = ["turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.right_color == color.blue \
+                            or cube.right_color == color.orange:
+                        directions = ["turn_right_left",
+                                      "turn_bottom_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        break
+                # Top right edge
+            if cube.position == pos_list[2,2,1]:
+                if cube.top_color == color.white:
+                    if cube.right_color == color.red:
+                        self.white_edge_right = True
+                    elif cube.right_color == color.green \
+                            or cube.right_color == color.orange \
+                            or cube.right_color == color.blue:
+                        directions = ["turn_right_right",
+                                      "turn_right_right",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                elif cube.right_color == color.white:
+                    if cube.top_color == color.red:
+                        directions = ["turn_right_left",
+                                      "turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.top_color == color.green \
+                            or cube.top_color == color.blue \
+                            or cube.top_color == color.orange:
+                        directions = ["turn_right_left",
+                                      "turn_right_left",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                # Back right
+            if cube.position == pos_list[2,1,2]:
+                if cube.back_color == color.white:
+                    if cube.right_color == color.red:
+                        directions = ["turn_right_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.right_color == color.green \
+                            or cube.right_color == color.orange:
+                        directions = ["turn_right_right",
+                                      "turn_bottom_right",
+                                      "turn_right_left"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.right_color == color.blue:
+                        directions = ["turn_right_right",
+                                      "turn_bottom_right",
+                                      "turn_right_left",
+                                      "turn_back_right",
+                                      "turn_back_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                elif cube.right_color == color.white:
+                    if cube.back_color == color.red:
+                        directions = ["turn_back_left",
+                                      "turn_bottom_left",
+                                      "turn_back_right",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.back_color == color.green \
+                            or cube.back_color == color.orange:
+                        directions = ["turn_back_left",
+                                      "turn_bottom_right",
+                                      "turn_back_right"]
+                        self.direction_list.extend(directions)
+                        break
+                    elif cube.back_color == color.blue:
+                        directions = ["turn_back_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                # Top back edge
+            if cube.position == pos_list[1,2,2]:
+                if cube.top_color == color.white:
+                    if cube.back_color == color.blue:
+                        self.white_edge_back = True
+                    elif cube.back_color == color.green \
+                            or cube.back_color == color.red \
+                            or cube.back_color == color.orange:
+                        directions = ["turn_back_left",
+                                      "turn_back_left",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                elif cube.back_color == color.white:
+                    if cube.top_color == color.blue:
+                        directions = ["turn_back_right",
+                                      "turn_left_left",
+                                      "turn_bottom_left",
+                                      "turn_left_right",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.top_color == color.green \
+                            or cube.top_color == color.orange \
+                            or cube.top_color == color.red:
+                        directions = ["turn_back_left",
+                                      "turn_back_left",
+                                      "turn_bottom_right"]
+                        self.direction_list.extend(directions)
+                        break
+                # Front bottom edge
+            if cube.position == pos_list[1,0,0]:
+                if cube.bottom_color == color.white:
+                    if cube.front_color == color.green:
+                        directions = ["turn_front_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.front_color == color.orange:
+                        directions = ["turn_bottom_left",
+                                      "turn_left_left",
+                                      "turn_left_left",]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.front_color == color.blue:
+                        directions = ["turn_bottom_left",
+                                      "turn_bottom_left",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.front_color == color.red:
+                        directions = ["turn_bottom_right",
+                                      "turn_right_left",
+                                      "turn_right_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                elif cube.front_color == color.white:
+                    if cube.bottom_color == color.green:
+                        directions = ["turn_front_left",
+                                      "turn_right_left",
+                                      "turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.bottom_color == color.orange:
+                        directions = ["turn_bottom_left",
+                                      "turn_left_left",
+                                      "turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.bottom_color == color.blue:
+                        directions = ["turn_bottom_left",
+                                      "turn_bottom_left",
+                                      "turn_back_left",
+                                      "turn_left_left",
+                                      "turn_bottom_left",
+                                      "turn_left_right",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.bottom_color == color.red:
+                        directions = ["turn_bottom_right",
+                                      "turn_right_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                # Bottom right
+            if cube.position  == pos_list[2,0,1]:
+                if cube.bottom_color == color.white:
+                    if cube.right_color == color.red:
+                        directions = ["turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.right_color == color.green:
+                        directions = ["turn_bottom_left",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.right_color == color.blue:
+                        directions = ["turn_bottom_right",
+                                      "turn_back_right",
+                                      "turn_back_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.right_color == color.orange:
+                        directions = ["turn_bottom_right",
+                                      "turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                elif cube.right_color == color.white:
+                    if cube.bottom_color == color.red:
+                        directions = ["turn_right_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.bottom_color ==  color.blue:
+                        directions = ["turn_bottom_right",
+                                      "turn_back_right",
+                                      "turn_right_right",
+                                      "turn_bottom_right",
+                                      "turn_right_left",
+                                      "turn_back_right",
+                                      "turn_back_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.bottom_color == color.orange:
+                        directions = ["turn_bottom_right",
+                                      "turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.bottom_color == color.green:
+                        directions = ["turn_bottom_left",
+                                      "turn_front_left",
+                                      "turn_right_left",
+                                      "turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                # Bottom back
+            if cube.position == pos_list[1,0,2]:
+                if cube.bottom_color == color.white:
+                    if cube.back_color == color.blue:
+                        directions = ["turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.back_color == color.green:
+                        directions = ["turn_bottom_left",
+                                      "turn_bottom_left",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.back_color == color.red:
+                        directions = ["turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.back_color == color.orange:
+                        directions = ["turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                elif cube.back_color == color.white:
+                    if cube.bottom_color == color.blue:
+                        directions = ["turn_back_left",
+                                      "turn_left_left",
+                                      "turn_bottom_left",
+                                      "turn_left_right",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.bottom_color == color.orange:
+                        directions = ["turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.bottom_color == color.red:
+                        directions = ["turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.bottom_color == color.green:
+                        directions = ["turn_bottom_left",
+                                      "turn_bottom_left",
+                                      "turn_front_left",
+                                      "turn_right_left",
+                                      "turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_front_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                # Bottom left
+            if cube.position == pos_list[0,0,1]:
+                if cube.bottom_color == color.white:
+                    if cube.left_color == color.orange:
+                        directions = ["turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.left_color == color.blue:
+                        directions = ["turn_bottom_left",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+                    elif cube.left_color == color.red:
+                        directions = ["turn_bottom_left",
+                                      "turn_bottom_left",
+                                      "turn_right_right",
+                                      "turn_right_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.left_color == color.green:
+                        directions = ["turn_bottom_right",
+                                      "turn_front_right",
+                                      "turn_front_right"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                elif cube.left_color == color.white:
+                    if cube.bottom_color == color.orange:
+                        directions = ["turn_left_left",
+                                      "turn_front_left",
+                                      "turn_bottom_left",
+                                      "turn_front_right",
+                                      "turn_left_left",
+                                      "turn_left_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_left = True
+                        break
+                    elif cube.bottom_color == color.green:
+                        directions = ["turn_bottom_right",
+                                      "turn_front_right",
+                                      "turn_left_right",
+                                      "turn_bottom_right",
+                                      "turn_left_left",
+                                      "turn_front_left",
+                                      "turn_front_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_front = True
+                        break
+                    elif cube.bottom_color == color.red:
+                        directions = ["turn_bottom_right",
+                                      "turn_bottom_right",
+                                      "turn_right_right",
+                                      "turn_front_right",
+                                      "turn_bottom_right",
+                                      "turn_front_left",
+                                      "turn_right_left",
+                                      "turn_right_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_right = True
+                        break
+                    elif cube.bottom_color == color.blue:
+                        directions = ["turn_bottom_left",
+                                      "turn_back_left",
+                                      "turn_left_left",
+                                      "turn_bottom_left",
+                                      "turn_left_right",
+                                      "turn_back_left",
+                                      "turn_back_left"]
+                        self.direction_list.extend(directions)
+                        self.white_edge_back = True
+                        break
+
+
+        if self.white_edge_left and self.white_edge_front and self.white_edge_back and self.white_edge_right:
+            self.white_edges_solved = True
+
+    def solve_white_corners(self, cube_list, pos_list):
+        print("solving_white_corners")
+
+
+
+
+    def move(self):
+        return self.direction_list
+
+
+
+
+
+
 
 def make_positions_list():
     """set a 3d position list with the middle position in x y z dimension has coordinates (0,0,0)"""
@@ -930,6 +1599,7 @@ def turn_bottom_left(cube_list, pos_list):
 
 app = Ursina()
 f = Facing()
+s = Solver()
 pos_list = make_positions_list()
 cube_list = set_cube(pos_list)
 
@@ -998,6 +1668,7 @@ def input(key):
             turn_bottom_left(cube_list, pos_list)
 
     elif key == "r":
+        print("start randomizing")
         for i in range(random.randint(75, 100)):
             rando = random.randint(1, 12)
             if rando == 1:
@@ -1024,6 +1695,45 @@ def input(key):
                 turn_bottom_left(cube_list, pos_list)
             elif rando == 12:
                 turn_bottom_right(cube_list, pos_list)
+        print("randomized")
+        s.reset_solver()
+
+
+    elif key == 'p':
+        while not s.cube_solved:
+            dir_list = s.solve_cube(cube_list, pos_list)
+            if dir_list != [] and dir_list is not None:
+                print(dir_list)
+                for dir in dir_list:
+                    if dir == "turn_front_left":
+                        turn_front_left(cube_list, pos_list)
+                    elif dir == "turn_front_right":
+                        turn_front_right(cube_list, pos_list)
+                    elif dir == "turn_left_right":
+                        turn_left_right(cube_list, pos_list)
+                    elif dir == "turn_left_left":
+                        turn_left_left(cube_list, pos_list)
+                    elif dir == "turn_bottom_right":
+                        turn_bottom_right(cube_list, pos_list)
+                    elif dir == "turn_bottom_left":
+                        turn_bottom_left(cube_list, pos_list)
+                    elif dir == "turn_right_right":
+                        turn_right_right(cube_list, pos_list)
+                    elif dir == "turn_right_left":
+                        turn_right_left(cube_list, pos_list)
+                    elif dir == "turn_back_right":
+                        turn_back_right(cube_list, pos_list)
+                    elif dir == "turn_back_left":
+                        turn_back_left(cube_list, pos_list)
+                    elif dir == "turn_top_left":
+                        turn_top_left(cube_list, pos_list)
+                    elif dir == "turn_top_right":
+                        turn_top_right(cube_list, pos_list)
+            elif not dir_list or dir_list is None:
+                print("no solutions found")
+                break
+
+
 
 set_camera()
 EditorCamera()
