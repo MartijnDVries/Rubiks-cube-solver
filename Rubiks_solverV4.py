@@ -2,8 +2,6 @@ from ursina import *
 import math
 import datetime
 
-from _thread import *
-
 class Rubiks(Entity):
     def __init__(self, front_color=color.black, back_color= color.black, left_color=color.black, right_color=color.black, top_color=color.black, bottom_color=color.black, position=None):
         super().__init__()
@@ -101,32 +99,26 @@ class Solver:
         self.cube_solved = False
 
     def reset_solver(self):
+        """reset all values to unsolved"""
         self.white_edge_left = False
         self.white_edge_front = False
         self.white_edge_right = False
         self.white_edge_back =  False
         self.white_edges_solved = False
-
         self.white_corners_solved = False
         self.white_front_left_corner = False
         self.white_front_right_corner = False
         self.white_back_left_corner = False
         self.white_back_right_corner = False
-
         self.middle_edges_solved = False
         self.green_orange_edge_solved = False
         self.green_red_edge_solved = False
         self.blue_red_edge_solved = False
         self.blue_orange_edge_solved = False
-
         self.upper_cross = False
-
         self.upper_edges_solved = False
-
         self.upper_corner_placement = False
-
         self.yellow_corners_solved = False
-
         self.cube_solved = False
 
     def solve_cube(self, cube_list, pos_list):
@@ -151,7 +143,6 @@ class Solver:
         elif not self.yellow_corners_solved:
             self.solve_yellow_corners(cube_list, pos_list)
             return self.direction_list
-
 
         if self.yellow_corners_solved:
             self.cube_solved = True
@@ -1933,29 +1924,6 @@ class Solver:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def make_positions_list():
     """set a 3d position list with the middle position in x y z dimension has coordinates (0,0,0)"""
     pos_list = dict()
@@ -2938,78 +2906,43 @@ def input(key):
 
 
     elif key == 'p':
-        start_new_thread(solver, (cube_list, pos_list))
-
-
-    elif key == 'm':
-        s.solve_yellow_corners(cube_list, pos_list)
-    elif key == 'k':
-        s.set_upper_corners(cube_list, pos_list)
-        for dir in s.direction_list:
-            if dir == "turn_front_left":
-                turn_front_left(cube_list, pos_list)
-            elif dir == "turn_front_right":
-                turn_front_right(cube_list, pos_list)
-            elif dir == "turn_left_right":
-                turn_left_right(cube_list, pos_list)
-            elif dir == "turn_left_left":
-                turn_left_left(cube_list, pos_list)
-            elif dir == "turn_bottom_right":
-                turn_bottom_right(cube_list, pos_list)
-            elif dir == "turn_bottom_left":
-                turn_bottom_left(cube_list, pos_list)
-            elif dir == "turn_right_right":
-                turn_right_right(cube_list, pos_list)
-            elif dir == "turn_right_left":
-                turn_right_left(cube_list, pos_list)
-            elif dir == "turn_back_right":
-                turn_back_right(cube_list, pos_list)
-            elif dir == "turn_back_left":
-                turn_back_left(cube_list, pos_list)
-            elif dir == "turn_top_left":
-                turn_top_left(cube_list, pos_list)
-            elif dir == "turn_top_right":
-                turn_top_right(cube_list, pos_list)
-
-def solver(cube_list, pos_list):
-    s = Solver()
-    begin_time = datetime.datetime.now()
-    while not s.cube_solved:
-        dir_list = s.solve_cube(cube_list, pos_list)
-        if dir_list != [] and dir_list is not None:
-            print(dir_list)
-            for dir in dir_list:
-                if dir == "turn_front_left":
-                    turn_front_left(cube_list, pos_list)
-                elif dir == "turn_front_right":
-                    turn_front_right(cube_list, pos_list)
-                elif dir == "turn_left_right":
-                    turn_left_right(cube_list, pos_list)
-                elif dir == "turn_left_left":
-                    turn_left_left(cube_list, pos_list)
-                elif dir == "turn_bottom_right":
-                    turn_bottom_right(cube_list, pos_list)
-                elif dir == "turn_bottom_left":
-                    turn_bottom_left(cube_list, pos_list)
-                elif dir == "turn_right_right":
-                    turn_right_right(cube_list, pos_list)
-                elif dir == "turn_right_left":
-                    turn_right_left(cube_list, pos_list)
-                elif dir == "turn_back_right":
-                    turn_back_right(cube_list, pos_list)
-                elif dir == "turn_back_left":
-                    turn_back_left(cube_list, pos_list)
-                elif dir == "turn_top_left":
-                    turn_top_left(cube_list, pos_list)
-                elif dir == "turn_top_right":
-                    turn_top_right(cube_list, pos_list)
-        elif not dir_list or dir_list is None:
-            continue
-        elif s.cube_solved:
-            break
-    end_time = datetime.datetime.now()
-    solve_time = end_time - begin_time
-    print(f"solved in {str(solve_time)[-8:]}s.")
+        begin_time = datetime.datetime.now()
+        while not s.cube_solved:
+            dir_list = s.solve_cube(cube_list, pos_list)
+            if dir_list != [] and dir_list is not None:
+                print(dir_list)
+                for dir in dir_list:
+                    if dir == "turn_front_left":
+                        turn_front_left(cube_list, pos_list)
+                    elif dir == "turn_front_right":
+                        turn_front_right(cube_list, pos_list)
+                    elif dir == "turn_left_right":
+                        turn_left_right(cube_list, pos_list)
+                    elif dir == "turn_left_left":
+                        turn_left_left(cube_list, pos_list)
+                    elif dir == "turn_bottom_right":
+                        turn_bottom_right(cube_list, pos_list)
+                    elif dir == "turn_bottom_left":
+                        turn_bottom_left(cube_list, pos_list)
+                    elif dir == "turn_right_right":
+                        turn_right_right(cube_list, pos_list)
+                    elif dir == "turn_right_left":
+                        turn_right_left(cube_list, pos_list)
+                    elif dir == "turn_back_right":
+                        turn_back_right(cube_list, pos_list)
+                    elif dir == "turn_back_left":
+                        turn_back_left(cube_list, pos_list)
+                    elif dir == "turn_top_left":
+                        turn_top_left(cube_list, pos_list)
+                    elif dir == "turn_top_right":
+                        turn_top_right(cube_list, pos_list)
+            elif not dir_list or dir_list is None:
+                continue
+            elif s.cube_solved:
+                break
+        end_time = datetime.datetime.now()
+        solve_time = end_time - begin_time
+        print(f"solved in {str(solve_time)[-8:]}s.")
 
 
 set_camera()
