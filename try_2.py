@@ -1859,7 +1859,7 @@ class Solver:
                 return
 
     def solve_yellow_corners(self, cube_list, pos_list):
-        """turn wrongly configurated yellow corners right"""
+        """turn wrong configurated yellow corners right so that yellow is facing down"""
         self.direction_list = list()
         corner_list = [False, False, False, False]
         turn_list = [0,0,0,0]
