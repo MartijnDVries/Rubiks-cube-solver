@@ -25,6 +25,12 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   {'-','-','-','w','-','b'},
   {'-','-','r','w','-','b'}};
 
+  char orgColour = '-';
+  char orgArray[6]= {};
+  char convArray[8][6]= {{}};
+
+
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -40,6 +46,7 @@ void setup() {
     }
     Serial.println();
   }
+  RightRight(cubeArray);
   RightRight(cubeArray);
   Serial.println(cubeArray[0]);
 }
@@ -80,15 +87,6 @@ void FrontRight(char Array[][6]) {
 
 void RightRight(char Array[][6]){
   // Make a conversion array 
-  char orgColour = '-';
-  char orgArray[6]= {};
-  char convArray[8][6]= {{'-','-','-','-','-','-'}, 
-  {'-','-','-','-','-','-'},
-  {'-','-','-','-','-','-'},
-  {'-','-','-','-','-','-'},
-  {'-','-','-','-','-','-'},
-  {'-','-','-','-','-','-'},
-  {'-','-','-','-','-','-'}};
   // Set the rotating cubes in the conversion array
   for (int i = 0; i < 6; i++){
       convArray[0][i] = Array[2][i];

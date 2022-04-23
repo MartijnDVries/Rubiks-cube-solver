@@ -1975,7 +1975,7 @@ class RubiksCube:
 
     def test_position(self):
         self.cube_list = list()
-        test_string = "go--y-g---y-y-r-b-go----y-r---go-w--g--w--y-rg---o--y---r-b--o-w----rg---o--yb----yb--r-bw-o---b--r--w-o-w-b---w-b--rg-w"
+        test_string = "go--y-g---y-b-r-w-go----b-r---go-w--g--w--b-ry---o--y---r-w--o-w----ry---o--yb----yb--r-wg-o---b--r--g-o-w-b---w-b--ry-g"
         re_list = re.findall('......', test_string)
         position_list = [(0,0,0),
                          (1,0,0),
