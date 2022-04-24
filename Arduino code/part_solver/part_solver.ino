@@ -29,9 +29,6 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   char orgArray[6]= {};
   char convArray[8][6]= {{}};
 
-
-
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -46,8 +43,12 @@ void setup() {
     }
     Serial.println();
   }
+  TopLeft(cubeArray);
   RightRight(cubeArray);
+  LeftLeft(cubeArray);
+  TopLeft(cubeArray);
   RightRight(cubeArray);
+  BottomLeft(cubeArray);
   Serial.println(cubeArray[0]);
 }
 
@@ -59,8 +60,6 @@ void loop() {
 
 void FrontRight(char Array[][6]) {
   // Turn the front of the cube right
-  char orgColour = '-';
-  char orgArray[6]= {};
   for (int i = 0; i < 6; i++){
     orgArray[i] = Array[5][i];
     Array[5][i] = Array[0][i];
@@ -82,6 +81,30 @@ void FrontRight(char Array[][6]) {
     Array[i][2] = Array[i][3];
     Array[i][3] = orgColour;
     
+  }
+}
+
+void FrontLeft(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+    orgArray[i] = Array[5][i];
+    Array[5][i] = Array[7][i];
+    Array[7][i] = Array[2][i];
+    Array[2][i] = Array[0][i];
+    cubeArray[0][i] = orgArray[i];
+
+    orgArray[i] = Array[1][i];
+    Array[1][i] = Array[3][i];
+    Array[3][i] = Array[6][i];
+    Array[6][i] = Array[4][i];
+    Array[4][i] = orgArray[i];
+  }
+  // Rotate the colors
+  for (int i = 0; i < 8; i++){
+    orgColour = Array[i][1];
+    Array[i][1] = Array[i][3];
+    Array[i][3] = Array[i][2];
+    Array[i][2] = Array[i][4];
+    Array[i][4] = orgColour; 
   }
 }
 
@@ -117,4 +140,216 @@ void RightRight(char Array[][6]){
     Array[9][i] = convArray[6][i];
     Array[4][i] = convArray[7][i]; 
   }
+}
+
+void RightLeft(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+      convArray[0][i] = Array[2][i];
+      convArray[1][i] = Array[4][i];
+      convArray[2][i] = Array[7][i];
+      convArray[3][i] = Array[9][i];
+      convArray[4][i] = Array[11][i];
+      convArray[5][i] = Array[14][i];
+      convArray[6][i] = Array[16][i];
+      convArray[7][i] = Array[19][i];
+  }
+  // Rotate the colors in the conversion array
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][0];
+    convArray[i][0] = convArray[i][3];
+    convArray[i][3] = convArray[i][5];
+    convArray[i][5] = convArray[i][4];
+    convArray[i][4] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[14][i] = convArray[0][i];
+    Array[9][i] = convArray[1][i];
+    Array[2][i] = convArray[2][i];
+    Array[16][i] = convArray[3][i];
+    Array[4][i] = convArray[4][i];
+    Array[19][i] = convArray[5][i];
+    Array[11][i] = convArray[6][i];
+    Array[7][i] = convArray[7][i]; 
+  }
+}
+
+void LeftRight(char Array[][6]){
+  // Apply same strategy as rightright
+  for (int i = 0; i < 6; i++){
+      convArray[0][i] = Array[0][i];
+      convArray[1][i] = Array[3][i];
+      convArray[2][i] = Array[5][i];
+      convArray[3][i] = Array[8][i];
+      convArray[4][i] = Array[10][i];
+      convArray[5][i] = Array[12][i];
+      convArray[6][i] = Array[15][i];
+      convArray[7][i] = Array[17][i];   
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][0];
+    convArray[i][0] = convArray[i][3];
+    convArray[i][3] = convArray[i][5];
+    convArray[i][5] = convArray[i][4];
+    convArray[i][4] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[12][i] = convArray[0][i];
+    Array[8][i] = convArray[1][i];
+    Array[0][i] = convArray[2][i];
+    Array[15][i] = convArray[3][i];
+    Array[3][i] = convArray[4][i];
+    Array[17][i] = convArray[5][i];
+    Array[10][i] = convArray[6][i];
+    Array[5][i] = convArray[7][i]; 
+  }
+}
+
+void LeftLeft(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+      convArray[0][i] = Array[0][i];
+      convArray[1][i] = Array[3][i];
+      convArray[2][i] = Array[5][i];
+      convArray[3][i] = Array[8][i];
+      convArray[4][i] = Array[10][i];
+      convArray[5][i] = Array[12][i];
+      convArray[6][i] = Array[15][i];
+      convArray[7][i] = Array[17][i];   
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][0];
+    convArray[i][0] = convArray[i][4];
+    convArray[i][4] = convArray[i][5];
+    convArray[i][5] = convArray[i][3];
+    convArray[i][3] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[5][i] = convArray[0][i];
+    Array[10][i] = convArray[1][i];
+    Array[17][i] = convArray[2][i];
+    Array[3][i] = convArray[3][i];
+    Array[15][i] = convArray[4][i];
+    Array[0][i] = convArray[5][i];
+    Array[8][i] = convArray[6][i];
+    Array[12][i] = convArray[7][i]; 
+  }
+}
+
+void BottomRight(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+      convArray[0][i] = Array[0][i];
+      convArray[1][i] = Array[1][i];
+      convArray[2][i] = Array[2][i];
+      convArray[3][i] = Array[8][i];
+      convArray[4][i] = Array[9][i];
+      convArray[5][i] = Array[12][i];
+      convArray[6][i] = Array[13][i];
+      convArray[7][i] = Array[14][i];   
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][1];
+    convArray[i][1] = convArray[i][5];
+    convArray[i][5] = convArray[i][2];
+    convArray[i][2] = convArray[i][0];
+    convArray[i][0] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[2][i] = convArray[0][i];
+    Array[9][i] = convArray[1][i];
+    Array[14][i] = convArray[2][i];
+    Array[1][i] = convArray[3][i];
+    Array[13][i] = convArray[4][i];
+    Array[0][i] = convArray[5][i];
+    Array[8][i] = convArray[6][i];
+    Array[12][i] = convArray[7][i]; 
+  }
+}
+
+void BottomLeft(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+      convArray[0][i] = Array[0][i];
+      convArray[1][i] = Array[1][i];
+      convArray[2][i] = Array[2][i];
+      convArray[3][i] = Array[8][i];
+      convArray[4][i] = Array[9][i];
+      convArray[5][i] = Array[12][i];
+      convArray[6][i] = Array[13][i];
+      convArray[7][i] = Array[14][i];   
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][1];
+    convArray[i][1] = convArray[i][0];
+    convArray[i][0] = convArray[i][2];
+    convArray[i][2] = convArray[i][5];
+    convArray[i][5] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[12][i] = convArray[0][i];
+    Array[8][i] = convArray[1][i];
+    Array[0][i] = convArray[2][i];
+    Array[13][i] = convArray[3][i];
+    Array[1][i] = convArray[4][i];
+    Array[14][i] = convArray[5][i];
+    Array[9][i] = convArray[6][i];
+    Array[2][i] = convArray[7][i]; 
+  }
+}
+
+void TopRight(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+    convArray[0][i] = Array[5][i];
+    convArray[1][i] = Array[6][i];
+    convArray[2][i] = Array[7][i];
+    convArray[3][i] = Array[10][i];
+    convArray[4][i] = Array[11][i];
+    convArray[5][i] = Array[17][i];
+    convArray[6][i] = Array[18][i];
+    convArray[7][i] = Array[19][i]; 
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][1];
+    convArray[i][1] = convArray[i][0];
+    convArray[i][0] = convArray[i][2];
+    convArray[i][2] = convArray[i][5];
+    convArray[i][5] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[17][i] = convArray[0][i];
+    Array[10][i] = convArray[1][i];
+    Array[5][i] = convArray[2][i];
+    Array[18][i] = convArray[3][i];
+    Array[6][i] = convArray[4][i];
+    Array[19][i] = convArray[5][i];
+    Array[11][i] = convArray[6][i];
+    Array[7][i] = convArray[7][i]; 
+  }
+}
+
+void TopLeft(char Array[][6]){
+  for (int i = 0; i < 6; i++){
+    convArray[0][i] = Array[5][i];
+    convArray[1][i] = Array[6][i];
+    convArray[2][i] = Array[7][i];
+    convArray[3][i] = Array[10][i];
+    convArray[4][i] = Array[11][i];
+    convArray[5][i] = Array[17][i];
+    convArray[6][i] = Array[18][i];
+    convArray[7][i] = Array[19][i]; 
+  }
+  for (int i = 0; i < 8; i++){
+    orgColour = convArray[i][1];
+    convArray[i][1] = convArray[i][5];
+    convArray[i][5] = convArray[i][2];
+    convArray[i][2] = convArray[i][0];
+    convArray[i][0] = orgColour;
+  }
+  for (int i = 0; i < 6; i++){
+    Array[7][i] = convArray[0][i];
+    Array[11][i] = convArray[1][i];
+    Array[19][i] = convArray[2][i];
+    Array[6][i] = convArray[3][i];
+    Array[18][i] = convArray[4][i];
+    Array[5][i] = convArray[5][i];
+    Array[10][i] = convArray[6][i];
+    Array[17][i] = convArray[7][i]; 
+  }  
 }
