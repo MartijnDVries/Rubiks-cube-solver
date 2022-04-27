@@ -1,4 +1,4 @@
-// make an test array for the cube each element contains six elements which 
+// make an test array for the cube each element contains six elements which
 // represent the colors of that cubicle in the order
 // front, left, right, top, bottom, back
 // g = green o = orange w = white y = yellow r = red and - = black
@@ -42,19 +42,14 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   char orgColour = '-';
   char orgArray[6]= {};
   char convArray[8][6]= {{}};
- 
-  
+
+
 
   // Set up variables for the solver
     // White Cross
   bool WhiteCrossSolved = false;
-  bool whitefrontedge = false;
-  bool whiteleftedge = false;
-  bool whiterightedge = false;
-  bool whitebackedge = false;
+  byte edgeArray[4] = {0,0,0,0};
 
-  // Set up an directions array
-  String dirStr = String();
 
 void setup() {
   // put your setup code here, to run once:
@@ -89,110 +84,81 @@ void setup() {
   Serial.println("cube array before changes");
   Serial.println(cubeArray[0]);
 
-  // Comment onderstaande uit en see for yourself gaat om de string cube array after solve
 
-  // while (WhiteCrossSolved != true){
-  //   Serial.println("solving white cross");
-  //   WhiteCross();
-  // }
-  // for (int i = 0; i < 25; i++){
-  //   LeftLeft(cubeArray);
-  //   RightRight(cubeArray);
-  //   BackRight(cubeArray);
-  //   BottomLeft(cubeArray);
-  // }
+  while (WhiteCrossSolved != true){
+    Serial.println("solving white cross");
+    WhiteCross();
+  }
 
-
-  // dit is precies de algoritme die uit de solve white cross komt
-  RightLeft(cubeArray);
-  RightLeft(cubeArray);
-  BottomRight(cubeArray);
-  RightLeft(cubeArray);
-  BottomRight(cubeArray);
-  RightRight(cubeArray);
-  BackLeft(cubeArray);
-  BackLeft(cubeArray);
-  BottomRight(cubeArray);
-  BottomLeft(cubeArray);
-  LeftLeft(cubeArray);
-  FrontLeft(cubeArray);
-  BottomLeft(cubeArray);
-  FrontRight(cubeArray);
-  LeftLeft(cubeArray);
-  LeftLeft(cubeArray);
-  BottomRight(cubeArray);
-  RightLeft(cubeArray);
-  RightLeft(cubeArray);
-  Serial.println(dirStr);
   // print cubearray after changes to test with python code
   Serial.println("cube array after solve");
   Serial.println(cubeArray[0]);
 
-  for (int i = 0; i <= dirStr.length(); i++){
-    if (i % 2 == 0){
-      if (dirStr[i] == 'l'){
-        if (dirStr[i+1] == 'l'){
-          stepper_1.move(-50);
-          stepper_1.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_1.move(50);
-          stepper_1.runToPosition();
-        }
-      }
-      else if (dirStr[i] == 'r'){
-        if (dirStr[i+1] == 'l'){
-          stepper_2.move(-50);
-          stepper_2.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_2.move(50);
-          stepper_2.runToPosition();
-        }
-      }
-      else if (dirStr[i] == 't'){
-        if (dirStr[i+1] == 'l'){
-          stepper_3.move(-50);
-          stepper_3.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_3.move(50);
-          stepper_3.runToPosition();
-        }
-      }
-      else if (dirStr[i] == 'b'){
-        if (dirStr[i+1] == 'l'){
-          stepper_4.move(-50);
-          stepper_4.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_4.move(50);
-          stepper_4.runToPosition();
-        }
-      }
-      else if (dirStr[i] == 'f'){
-        if (dirStr[i+1] == 'l'){
-          stepper_5.move(-50);
-          stepper_5.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_5.move(50);
-          stepper_5.runToPosition();
-        }
-      }
-      else if (dirStr[i] == 'a'){
-        if (dirStr[i+1] == 'l'){
-          stepper_6.move(-50);
-          stepper_6.runToPosition();
-        }
-        else if (dirStr[i+1] == 'r'){
-          stepper_6.move(50);
-          stepper_6.runToPosition();
-        }
-      }
-      
-    }
-  } 
+  // Turn stepper motors
+//  for (int i = 0; i <= dirStr.length(); i++){
+//    if (i % 2 == 0){
+//      if (dirStr[i] == 'l'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_1.move(-50);
+//          stepper_1.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_1.move(50);
+//          stepper_1.runToPosition();
+//        }
+//      }
+//      else if (dirStr[i] == 'r'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_2.move(-50);
+//          stepper_2.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_2.move(50);
+//          stepper_2.runToPosition();
+//        }
+//      }
+//      else if (dirStr[i] == 't'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_3.move(-50);
+//          stepper_3.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_3.move(50);
+//          stepper_3.runToPosition();
+//        }
+//      }
+//      else if (dirStr[i] == 'b'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_4.move(-50);
+//          stepper_4.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_4.move(50);
+//          stepper_4.runToPosition();
+//        }
+//      }
+//      else if (dirStr[i] == 'f'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_5.move(-50);
+//          stepper_5.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_5.move(50);
+//          stepper_5.runToPosition();
+//        }
+//      }
+//      else if (dirStr[i] == 'a'){
+//        if (dirStr[i+1] == 'l'){
+//          stepper_6.move(-50);
+//          stepper_6.runToPosition();
+//        }
+//        else if (dirStr[i+1] == 'r'){
+//          stepper_6.move(50);
+//          stepper_6.runToPosition();
+//        }
+//      }
+//    }
+//  }
 }
 
 void loop() {
@@ -200,6 +166,7 @@ void loop() {
 
 
 }
+
 void setupcubeArray(char string[]){
   int k = 0;
   for (int l = 0; l < 20; l++){
@@ -232,8 +199,11 @@ void FrontRight(char Array[][6]) {
     Array[i][4] = Array[i][2];
     Array[i][2] = Array[i][3];
     Array[i][3] = orgColour;
-    
+
   }
+  // Rotate motor
+  stepper_5.move(50);
+  stepper_5.runToPosition();
 }
 
 void FrontLeft(char Array[][6]){
@@ -256,12 +226,15 @@ void FrontLeft(char Array[][6]){
     Array[i][1] = Array[i][3];
     Array[i][3] = Array[i][2];
     Array[i][2] = Array[i][4];
-    Array[i][4] = orgColour; 
+    Array[i][4] = orgColour;
   }
+  // Rotate motor
+  stepper_5.move(-50);
+  stepper_5.runToPosition();
 }
 
 void RightRight(char Array[][6]){
-  // Make a conversion array 
+  // Make a conversion array
   // Set the rotating cubes in the conversion array
   for (int i = 0; i < 6; i++){
       convArray[0][i] = Array[2][i];
@@ -290,8 +263,10 @@ void RightRight(char Array[][6]){
     Array[11][i] = convArray[4][i];
     Array[16][i] = convArray[5][i];
     Array[9][i] = convArray[6][i];
-    Array[4][i] = convArray[7][i]; 
+    Array[4][i] = convArray[7][i];
   }
+  stepper_2.move(-50);
+  stepper_2.runToPosition();
 }
 
 void RightLeft(char Array[][6]){
@@ -321,8 +296,10 @@ void RightLeft(char Array[][6]){
     Array[4][i] = convArray[4][i];
     Array[19][i] = convArray[5][i];
     Array[11][i] = convArray[6][i];
-    Array[7][i] = convArray[7][i]; 
+    Array[7][i] = convArray[7][i];
   }
+  stepper_2.move(50);
+  stepper_2.runToPosition();
 }
 
 void LeftRight(char Array[][6]){
@@ -335,7 +312,7 @@ void LeftRight(char Array[][6]){
       convArray[4][i] = Array[10][i];
       convArray[5][i] = Array[12][i];
       convArray[6][i] = Array[15][i];
-      convArray[7][i] = Array[17][i];   
+      convArray[7][i] = Array[17][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][0];
@@ -352,8 +329,10 @@ void LeftRight(char Array[][6]){
     Array[3][i] = convArray[4][i];
     Array[17][i] = convArray[5][i];
     Array[10][i] = convArray[6][i];
-    Array[5][i] = convArray[7][i]; 
+    Array[5][i] = convArray[7][i];
   }
+  stepper_1.move(50);
+  stepper_1.runToPosition();
 }
 
 void LeftLeft(char Array[][6]){
@@ -365,7 +344,7 @@ void LeftLeft(char Array[][6]){
       convArray[4][i] = Array[10][i];
       convArray[5][i] = Array[12][i];
       convArray[6][i] = Array[15][i];
-      convArray[7][i] = Array[17][i];   
+      convArray[7][i] = Array[17][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][0];
@@ -382,8 +361,10 @@ void LeftLeft(char Array[][6]){
     Array[15][i] = convArray[4][i];
     Array[0][i] = convArray[5][i];
     Array[8][i] = convArray[6][i];
-    Array[12][i] = convArray[7][i]; 
+    Array[12][i] = convArray[7][i];
   }
+  stepper_1.move(-50);
+  stepper_1.runToPosition();
 }
 
 void BottomRight(char Array[][6]){
@@ -395,7 +376,7 @@ void BottomRight(char Array[][6]){
       convArray[4][i] = Array[9][i];
       convArray[5][i] = Array[12][i];
       convArray[6][i] = Array[13][i];
-      convArray[7][i] = Array[14][i];   
+      convArray[7][i] = Array[14][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -412,8 +393,10 @@ void BottomRight(char Array[][6]){
     Array[13][i] = convArray[4][i];
     Array[0][i] = convArray[5][i];
     Array[8][i] = convArray[6][i];
-    Array[12][i] = convArray[7][i]; 
+    Array[12][i] = convArray[7][i];
   }
+  stepper_4.move(50);
+  stepper_4.runToPosition();
 }
 
 void BottomLeft(char Array[][6]){
@@ -425,7 +408,7 @@ void BottomLeft(char Array[][6]){
       convArray[4][i] = Array[9][i];
       convArray[5][i] = Array[12][i];
       convArray[6][i] = Array[13][i];
-      convArray[7][i] = Array[14][i];   
+      convArray[7][i] = Array[14][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -442,8 +425,10 @@ void BottomLeft(char Array[][6]){
     Array[1][i] = convArray[4][i];
     Array[14][i] = convArray[5][i];
     Array[9][i] = convArray[6][i];
-    Array[2][i] = convArray[7][i]; 
+    Array[2][i] = convArray[7][i];
   }
+  stepper_4.move(-50);
+  stepper_4.runToPosition();
 }
 
 void TopRight(char Array[][6]){
@@ -455,7 +440,7 @@ void TopRight(char Array[][6]){
     convArray[4][i] = Array[11][i];
     convArray[5][i] = Array[17][i];
     convArray[6][i] = Array[18][i];
-    convArray[7][i] = Array[19][i]; 
+    convArray[7][i] = Array[19][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -472,8 +457,10 @@ void TopRight(char Array[][6]){
     Array[6][i] = convArray[4][i];
     Array[19][i] = convArray[5][i];
     Array[11][i] = convArray[6][i];
-    Array[7][i] = convArray[7][i]; 
+    Array[7][i] = convArray[7][i];
   }
+  stepper_3.move(50);
+  stepper_3.runToPosition();
 }
 
 void TopLeft(char Array[][6]){
@@ -485,7 +472,7 @@ void TopLeft(char Array[][6]){
     convArray[4][i] = Array[11][i];
     convArray[5][i] = Array[17][i];
     convArray[6][i] = Array[18][i];
-    convArray[7][i] = Array[19][i]; 
+    convArray[7][i] = Array[19][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -502,8 +489,10 @@ void TopLeft(char Array[][6]){
     Array[18][i] = convArray[4][i];
     Array[5][i] = convArray[5][i];
     Array[10][i] = convArray[6][i];
-    Array[17][i] = convArray[7][i]; 
-  }  
+    Array[17][i] = convArray[7][i];
+  }
+  stepper_3.move(-50);
+  stepper_3.runToPosition();
 }
 
 void BackRight(char Array[][6]){
@@ -515,7 +504,7 @@ void BackRight(char Array[][6]){
     convArray[4][i] = Array[16][i];
     convArray[5][i] = Array[17][i];
     convArray[6][i] = Array[18][i];
-    convArray[7][i] = Array[19][i]; 
+    convArray[7][i] = Array[19][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -532,8 +521,10 @@ void BackRight(char Array[][6]){
     Array[18][i] = convArray[4][i];
     Array[12][i] = convArray[5][i];
     Array[15][i] = convArray[6][i];
-    Array[17][i] = convArray[7][i]; 
-  }  
+    Array[17][i] = convArray[7][i];
+  }
+  stepper_6.move(50);
+  stepper_6.runToPosition();
 }
 
 void BackLeft(char Array[][6]){
@@ -545,7 +536,7 @@ void BackLeft(char Array[][6]){
     convArray[4][i] = Array[16][i];
     convArray[5][i] = Array[17][i];
     convArray[6][i] = Array[18][i];
-    convArray[7][i] = Array[19][i]; 
+    convArray[7][i] = Array[19][i];
   }
   for (int i = 0; i < 8; i++){
     orgColour = convArray[i][1];
@@ -562,8 +553,10 @@ void BackLeft(char Array[][6]){
     Array[13][i] = convArray[4][i];
     Array[19][i] = convArray[5][i];
     Array[16][i] = convArray[6][i];
-    Array[14][i] = convArray[7][i]; 
-  }  
+    Array[14][i] = convArray[7][i];
+  }
+  stepper_6.move(-50);
+  stepper_6.runToPosition();
 }
 
 void WhiteCross(){
@@ -575,394 +568,312 @@ void WhiteCross(){
   // that were in the wrong spot on the top-side because we moved them to the bottom side.
 
   // if all edges are on the right spot the cross is solved we return without doing anything
-  if (whiteleftedge == true && whitefrontedge == true && whiterightedge == true && whitebackedge == true){
+  if (edgeArray[1] == 1 && edgeArray[0] == 1 && edgeArray[3] == 1 && edgeArray[2] == 1){
     WhiteCrossSolved = true;
     return;
   }
   // left top edge
   if (cubeArray[10][3] == 'w'){
     if (cubeArray[10][1] == 'o'){
-      whiteleftedge = true;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[10][1] == 'r' || cubeArray[10][1] == 'b' || cubeArray[10][1] == 'g'){
-      dirStr += "llllbr";
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
   else if (cubeArray[10][1] == 'w'){
     if (cubeArray[10][3] == 'o'){
-      dirStr += "lrflblfrlrlr";
       LeftRight(cubeArray);
       FrontLeft(cubeArray);
       BottomLeft(cubeArray);
       FrontRight(cubeArray);
       LeftRight(cubeArray);
       LeftRight(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[10][3] == 'r' || cubeArray[10][3] == 'b' || cubeArray[10][3] == 'g'){
-      dirStr += "lrlrbr";
       LeftRight(cubeArray);
       LeftRight(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   // left back edge
   }
   if (cubeArray[15][5] == 'w'){
     if (cubeArray[15][1] == 'o'){
-      dirStr += "lr";
       LeftRight(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[15][1] == 'r' || cubeArray[15][1] == 'g'){
-      dirStr += "arbral";
       BackRight(cubeArray);
       BottomRight(cubeArray);
       BackLeft(cubeArray);
-      return;
     }
     else if (cubeArray[15][1] == 'b'){
-      dirStr += "llbllrarar";
       LeftLeft(cubeArray);
       BottomLeft(cubeArray);
       LeftRight(cubeArray);
       BackRight(cubeArray);
       BackRight(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
   }
   else if (cubeArray[15][1] == 'w'){
     if (cubeArray[15][5] == 'o'){
-      dirStr += "arbrallrlr";
       BackRight(cubeArray);
       BottomRight(cubeArray);
       BackLeft(cubeArray);
       LeftRight(cubeArray);
       LeftRight(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[15][5] == 'r' || cubeArray[15][5] == 'g'){
-      dirStr += "arbral";
       BackRight(cubeArray);
       BottomRight(cubeArray);
       BackLeft(cubeArray);
-      return;
     }
     else if (cubeArray[15][5] == 'b'){
-      dirStr += "al";
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
   }
   // Left front edge
   if (cubeArray[3][0] == 'w'){
     if (cubeArray[3][1] == 'o'){
-      dirStr += "ll";
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[3][1] == 'r' || cubeArray[3][1] == 'b'){
-      dirStr += "flbrfr";
       FrontLeft(cubeArray);
       BottomRight(cubeArray);
       FrontRight(cubeArray);
-      return;
     }
     else if (cubeArray[3][1] == 'g'){
-      dirStr += "lrbrllflfl";
       LeftRight(cubeArray);
       BottomRight(cubeArray);
       LeftLeft(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
   }
   else if (cubeArray[3][1] == 'w'){
     if (cubeArray[3][0] == 'o'){
-      dirStr += "flblfrlrlr";
       FrontLeft(cubeArray);
       BottomLeft(cubeArray);
       FrontRight(cubeArray);
       LeftRight(cubeArray);
       LeftRight(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[3][0] == 'r' || cubeArray[3][0] == 'b'){
-      dirStr += "flbrfr";
       FrontLeft(cubeArray);
       BottomRight(cubeArray);
       FrontRight(cubeArray);
-      return;
     }
     else if (cubeArray[3][0] == 'g'){
-      dirStr += "fr";
       FrontRight(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
   }
   // front top edge
   if (cubeArray[6][3] == 'w'){
     if (cubeArray[6][0] == 'g'){
-      whitefrontedge = true;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[6][0] == 'r' || cubeArray[6][0] == 'b' || cubeArray[6][0] == 'o'){
-      dirStr += "frfrbr";
       FrontRight(cubeArray);
       FrontRight(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
-  else if (cubeArray[6][0] = 'w'){
+  else if (cubeArray[6][0] == 'w'){
     if (cubeArray[6][3] == 'g'){
-      dirStr += "frrlbrrrfrfr";
       FrontRight(cubeArray);
       RightLeft(cubeArray);
       BottomRight(cubeArray);
       RightRight(cubeArray);
       FrontRight(cubeArray);
       FrontRight(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[6][3] == 'r' || cubeArray[6][3] == 'b' || cubeArray[6][3] == 'o'){
-      dirStr += "frfrbr";
       FrontRight(cubeArray);
       FrontRight(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
   // Front right edge
   if (cubeArray[4][2] == 'w'){
     if (cubeArray[4][0] == 'g'){
-      dirStr += "fl";
       FrontLeft(cubeArray);
-      whitefrontedge = true;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[4][0] == 'o' || cubeArray[4][0] == 'b'){
-      dirStr += "frbrfl";
       FrontRight(cubeArray);
       BottomRight(cubeArray);
       FrontLeft(cubeArray);
-      return;
     }
     else if (cubeArray[4][0] == 'r'){
-      dirStr += "frbrflrrrr";
       FrontRight(cubeArray);
       BottomRight(cubeArray);
       FrontLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
   }
   else if (cubeArray[4][0] == 'w'){
     if (cubeArray[4][2] == 'g'){
-      dirStr += "rlblrrflfl";
       RightLeft(cubeArray);
       BottomLeft(cubeArray);
       RightRight(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[4][2] == 'r'){
-      dirStr += "rr";
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[4][2] == 'b' || cubeArray[4][2] == 'o'){
-      dirStr += "rlbrrr";
       RightLeft(cubeArray);
       BottomRight(cubeArray);
       RightRight(cubeArray);
-      return;
     }
   }
   // Top right egde
   if (cubeArray[11][3] == 'w'){
     if (cubeArray[11][2] == 'r'){
-      whiterightedge = true;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[11][2] == 'g' || cubeArray[11][2] == 'o' || cubeArray[11][2] == 'b'){
-      dirStr += "rrrrbr";
       RightRight(cubeArray);
       RightRight(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
   else if (cubeArray[11][2] == 'w'){
     if (cubeArray[11][3] == 'r'){
-      dirStr += "rlfrbrflrrrr";
       RightLeft(cubeArray);
       FrontRight(cubeArray);
       BottomRight(cubeArray);
       FrontLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[11][3] == 'g' || cubeArray[11][3] == 'b' || cubeArray[11][3] == 'o'){
-      dirStr += "rlrlbr";
       RightLeft(cubeArray);
       RightLeft(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
   // back right edge
   if (cubeArray[16][5] == 'w'){
     if (cubeArray[16][2] == 'r'){
-      dirStr += "rl";
       RightLeft(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[16][2] == 'g' || cubeArray[16][2] == 'o'){
-      dirStr += "rrarrl";
       RightRight(cubeArray);
       BottomRight(cubeArray);
       RightLeft(cubeArray);
-      return;
     }
     else if (cubeArray[16][2] == 'b'){
-      dirStr += "rrbrrlarar";
       RightRight(cubeArray);
       BottomRight(cubeArray);
       RightLeft(cubeArray);
       BackRight(cubeArray);
       BackRight(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
   }
   else if (cubeArray[16][2] == 'w'){
     if (cubeArray[16][5] == 'r'){
-      dirStr += "alblbrrrrr";
       BackLeft(cubeArray);
       BottomLeft(cubeArray);
       BackRight(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[16][5] == 'g' || cubeArray[16][5] == 'o'){
-      dirStr += "albrar";
       BackLeft(cubeArray);
       BottomRight(cubeArray);
       BackRight(cubeArray);
-      return;
     }
     else if (cubeArray[16][5] == 'b'){
-      dirStr += "ar";
       BackRight(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
   }
   // Top back edge
   if (cubeArray[18][3] == 'w'){
     if (cubeArray[18][5] == 'b'){
-      whitebackedge = true;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[18][5] == 'g' || cubeArray[18][5] == 'r' || cubeArray[18][5] == 'o'){
-      dirStr += "alalbr";
       BackLeft(cubeArray);
       BackLeft(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
-  else if (cubeArray[18][5] = 'w'){
+  else if (cubeArray[18][5] == 'w'){
     if (cubeArray[18][3] == 'b'){
-      dirStr += "arllbllralal";
       BackRight(cubeArray);
       LeftLeft(cubeArray);
       BottomLeft(cubeArray);
       LeftRight(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[18][3] == 'g' || cubeArray[18][3] == 'o' || cubeArray[18][3] == 'r'){
-      dirStr += "alalbr";
       BackLeft(cubeArray);
       BackLeft(cubeArray);
       BottomRight(cubeArray);
-      return;
     }
   }
   // Front bottom edge
   if (cubeArray[1][4] == 'w'){
     if (cubeArray[1][0] == 'g'){
-      dirStr += "frfr";
       FrontRight(cubeArray);
       FrontRight(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[1][0] == 'o'){
-      dirStr += "blllll";
       BottomLeft(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[1][0] == 'b'){
-      dirStr += "blblalal";
       BottomLeft(cubeArray);
       BottomLeft(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[1][0] == 'r'){
-      dirStr += "brrlrl";
       BottomRight(cubeArray);
       RightLeft(cubeArray);
       RightLeft(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
   }
   else if (cubeArray[1][0] == 'w'){
     if (cubeArray[1][4] == 'g'){
-      dirStr += "flrlblrrflfl";
       FrontLeft(cubeArray);
       RightLeft(cubeArray);
       BottomLeft(cubeArray);
       RightRight(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[1][4] == 'o'){
-      dirStr += "blllflblfrllll";
       BottomLeft(cubeArray);
       LeftLeft(cubeArray);
       FrontLeft(cubeArray);
@@ -970,11 +881,9 @@ void WhiteCross(){
       FrontRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[1][4] == 'b'){
-      dirStr += "blblalllbllralal";
       BottomLeft(cubeArray);
       BottomLeft(cubeArray);
       BackLeft(cubeArray);
@@ -983,11 +892,9 @@ void WhiteCross(){
       LeftRight(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[1][4] == 'r'){
-      dirStr += "brrrfrbrflrrrr";
       BottomRight(cubeArray);
       RightRight(cubeArray);
       FrontRight(cubeArray);
@@ -995,59 +902,47 @@ void WhiteCross(){
       FrontLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
   }
   // Bottom right edge
   if (cubeArray[9][4] == 'w'){
     if (cubeArray[9][2] == 'r'){
-      dirStr += "rrrr";
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[9][2] == 'g'){
-      dirStr += "blflfl";
       BottomLeft(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[9][2] == 'b'){
-      dirStr += "brarar";
       BottomRight(cubeArray);
       BackRight(cubeArray);
       BackRight(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[9][2] == 'o'){
-      dirStr += "brbrllll";
       BottomRight(cubeArray);
       BottomRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
   }
   else if (cubeArray[9][2] == 'w'){
     if (cubeArray[9][4] == 'r'){
-      dirStr += "rrfrbrflrrrr";
       RightRight(cubeArray);
       FrontRight(cubeArray);
       BottomRight(cubeArray);
       FrontLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[9][4] == 'b'){
-      dirStr += "brarrrbrrlarar";
       BottomRight(cubeArray);
       BackRight(cubeArray);
       RightRight(cubeArray);
@@ -1055,11 +950,9 @@ void WhiteCross(){
       RightLeft(cubeArray);
       BackRight(cubeArray);
       BackRight(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[9][4] == 'o'){
-      dirStr += "brbrllflblfrllll";
       BottomRight(cubeArray);
       BottomRight(cubeArray);
       LeftLeft(cubeArray);
@@ -1068,11 +961,9 @@ void WhiteCross(){
       FrontRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[9][4] == 'g'){
-      dirStr += "blflrlblrrflfl";
       BottomLeft(cubeArray);
       FrontLeft(cubeArray);
       RightLeft(cubeArray);
@@ -1080,58 +971,46 @@ void WhiteCross(){
       RightRight(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
   }
   // bottom back edge
   else if (cubeArray[13][4] == 'w'){
     if (cubeArray[13][5] == 'b'){
-      dirStr += "alal";
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[13][5] == 'g'){
-      dirStr += "blblflfl";
       BottomLeft(cubeArray);
       BottomLeft(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[13][5] == 'r'){
-      dirStr += "blrrrr";
       BottomLeft(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[13][5] == 'o'){
-      dirStr += "brllll";
       BottomRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
   }
   else if (cubeArray[13][5] == 'w'){
     if (cubeArray[13][4] == 'b'){
-      dirStr += "alllbllralal";
       BackLeft(cubeArray);
       LeftLeft(cubeArray);
       BottomLeft(cubeArray);
       LeftRight(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[13][4] == 'o'){
-      dirStr += "brllflblfrllll";
       BottomRight(cubeArray);
       LeftLeft(cubeArray);
       FrontLeft(cubeArray);
@@ -1139,11 +1018,9 @@ void WhiteCross(){
       FrontRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[13][4] == 'r'){
-      dirStr += "blrrfrbrflrrrr";
       BottomLeft(cubeArray);
       RightRight(cubeArray);
       FrontRight(cubeArray);
@@ -1151,11 +1028,9 @@ void WhiteCross(){
       FrontLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[13][4] == 'g'){
-      dirStr += "blblflrlblrrfrfr";
       BottomLeft(cubeArray);
       BottomLeft(cubeArray);
       FrontLeft(cubeArray);
@@ -1164,59 +1039,47 @@ void WhiteCross(){
       RightRight(cubeArray);
       FrontRight(cubeArray);
       FrontRight(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
   }
   // Bottom left edge
   if (cubeArray[8][4] == 'w'){
     if (cubeArray[8][1] == 'o'){
-      dirStr += "llll";
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[8][1] == 'b'){
-      dirStr += "blalal";
       BottomLeft(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
     else if (cubeArray[8][1] == 'r'){
-      dirStr += "blblrrrr";
       BottomLeft(cubeArray);
       BottomLeft(cubeArray);
       RightRight(cubeArray);
       RightRight(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[8][1] == 'g'){
-      dirStr += "brfrfr";
       BottomRight(cubeArray);
       FrontRight(cubeArray);
       FrontRight(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
   }
   else if (cubeArray[8][1] == 'w'){
     if (cubeArray[8][4] == 'o'){
-      dirStr += "llflblfrllll";
       LeftLeft(cubeArray);
       FrontLeft(cubeArray);
       BottomLeft(cubeArray);
       FrontRight(cubeArray);
       LeftLeft(cubeArray);
       LeftLeft(cubeArray);
-      whiteleftedge = true;
-      return;
+      edgeArray[1] = 1;
     }
     else if (cubeArray[8][4] == 'g'){
-      dirStr += "brfrlrbrllflfl";
       BottomRight(cubeArray);
       FrontRight(cubeArray);
       LeftRight(cubeArray);
@@ -1224,11 +1087,9 @@ void WhiteCross(){
       LeftLeft(cubeArray);
       FrontLeft(cubeArray);
       FrontLeft(cubeArray);
-      whitefrontedge = true;
-      return;
+      edgeArray[0] = 1;
     }
     else if (cubeArray[8][4] == 'r'){
-      dirStr += "brbrrrfrbrflrlrl";
       BottomRight(cubeArray);
       BottomRight(cubeArray);
       RightRight(cubeArray);
@@ -1237,11 +1098,9 @@ void WhiteCross(){
       FrontLeft(cubeArray);
       RightLeft(cubeArray);
       RightLeft(cubeArray);
-      whiterightedge = true;
-      return;
+      edgeArray[3] = 1;
     }
     else if (cubeArray[8][4] == 'b'){
-      dirStr += "blalllbllralal";
       BottomLeft(cubeArray);
       BackLeft(cubeArray);
       LeftLeft(cubeArray);
@@ -1249,8 +1108,7 @@ void WhiteCross(){
       LeftRight(cubeArray);
       BackLeft(cubeArray);
       BackLeft(cubeArray);
-      whitebackedge = true;
-      return;
+      edgeArray[2] = 1;
     }
   }
 }

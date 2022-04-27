@@ -36,7 +36,7 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   {'-','-','r','w','-','b'}};
 
   // input string to put in cubeArray
-  char test_str[] = "ry--b-b---o-b-w-o-br----o-g---yo-g--g--w--y-rg---y--b---y-o--g-y----wo---y--bo----wr--w-og-r---g--b--w-g-r-w---r-y--br-w";
+  char test_str[] = "gr--w-b---y-r-w-b-gy----r-b---oy-b--w--o--b-ow---b--o---b-w--r-g----ry---y--og----oy--g-wo-g---o--r--w-r-y-b---w-g--ry-g";
 
   // set up variables for conversion(rotation / position) of the cubicles
   char orgColour = '-';
@@ -86,7 +86,7 @@ void setup() {
   Serial.println(cubeArray[0]);
 
 
-  while (solveArray[6] != 1){
+  while (solveArray[1] != 1){
     if (solveArray[0] != 1){
       WhiteCross();
     }
@@ -1369,20 +1369,3 @@ void MiddleLayer(){
     Serial.println("Solving middle layer");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -435,6 +435,7 @@ class Solver:
                                       "turn_left_right"]
                         self.direction_list.extend(directions)
                         break
+
                 elif cube.left_color == color.white:
                     if cube.top_color == color.blue:
                         directions = ["turn_left_left",
@@ -447,6 +448,7 @@ class Solver:
                         self.direction_list.extend(directions)
                         self.white_back_left_corner = True
                         break
+
                     elif cube.top_color == color.green \
                             or cube.top_color == color.red \
                             or cube.top_color == color.orange:

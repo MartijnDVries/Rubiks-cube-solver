@@ -1978,8 +1978,8 @@ class RubiksCube:
 
     def test_position(self):
         self.cube_list = list()
-        test_string = "wb--o-r---b-r-b-y-yg----g-r---yg-r--g--w--o-gw---g--o---y-o--o-w----rw---w--br----ry--y-ob-o---b--y--b-r-w-g---w-b--gy-o"
-        test_string = "wb--o-r---b-r-b-y-yg----g-r---yg-r--g--w--o-gw---g--o---y-o--o-w----rw---w--br----rw--y-ob-o---b--y--b-r-w-g---w-b--gy-o"
+        test_string = "ry--b-y---o-g-y-o-by----o-g---go-w--g--w--g-rw---r--g---r-y--o-w----rw---o--yb----gy--g-yr-b---o--b--r-o-w-b---w-b--rw-b"
+
 
         re_list = re.findall('......', test_string)
         position_list = [(0,0,0),
@@ -2020,7 +2020,6 @@ class RubiksCube:
                     color_list.append(color.orange)
                 elif letter == '-':
                     color_list.append(color.black)
-            print(len(color_list))
             self.cube_list.append(Rubiks(front_color=color_list[0], left_color=color_list[1], right_color=color_list[2],top_color=color_list[3], bottom_color=color_list[4], back_color= color_list[5], position=self.pos_list[position_list[i]]))
             i += 1
 
@@ -2849,8 +2848,123 @@ class RubiksCube:
                 cube.back_color = cube.left_color
                 cube.left_color = org_front_color
                 cube.model = cube.ColorCube()
-    
 
+def make_test_string(cube_list, pos_list):
+    tst_str = ''
+    position_list = [(0,0,0),
+                     (1,0,0),
+                     (2,0,0),
+                     (0,1,0),
+                     (2,1,0),
+                     (0,2,0),
+                     (1,2,0),
+                     (2,2,0),
+                     (0,0,1),
+                     (2,0,1),
+                     (0,2,1),
+                     (2,2,1),
+                     (0,0,2),
+                     (1,0,2),
+                     (2,0,2),
+                     (0,1,2),
+                     (2,1,2),
+                     (0,2,2),
+                     (1,2,2),
+                     (2,2,2)]
+    for pos in position_list:
+        for cube in cube_list:
+            if cube.position == pos_list[pos]:
+                    # front color
+                if cube.front_color == color.green:
+                    tst_str += 'g'
+                elif cube.front_color == color.white:
+                    tst_str += 'w'
+                elif cube.front_color == color.red:
+                    tst_str += 'r'
+                elif cube.front_color == color.blue:
+                    tst_str += 'b'
+                elif cube.front_color == color.black:
+                    tst_str += '-'
+                elif cube.front_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.front_color == color.orange:
+                    tst_str += 'o'
+                    # left color
+                if cube.left_color == color.green:
+                    tst_str += 'g'
+                elif cube.left_color == color.white:
+                    tst_str += 'w'
+                elif cube.left_color == color.red:
+                    tst_str += 'r'
+                elif cube.left_color == color.blue:
+                    tst_str += 'b'
+                elif cube.left_color == color.black:
+                    tst_str += '-'
+                elif cube.left_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.left_color == color.orange:
+                    tst_str += 'o'
+                    # right color
+                if cube.right_color == color.green:
+                    tst_str += 'g'
+                elif cube.right_color == color.white:
+                    tst_str += 'w'
+                elif cube.right_color == color.red:
+                    tst_str += 'r'
+                elif cube.right_color == color.blue:
+                    tst_str += 'b'
+                elif cube.right_color == color.black:
+                    tst_str += '-'
+                elif cube.right_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.right_color == color.orange:
+                    tst_str += 'o'
+                    # top color
+                if cube.top_color == color.green:
+                    tst_str += 'g'
+                elif cube.top_color == color.white:
+                    tst_str += 'w'
+                elif cube.top_color == color.red:
+                    tst_str += 'r'
+                elif cube.top_color == color.blue:
+                    tst_str += 'b'
+                elif cube.top_color == color.black:
+                    tst_str += '-'
+                elif cube.top_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.top_color == color.orange:
+                    tst_str += 'o'
+                    # bottom color
+                if cube.bottom_color == color.green:
+                    tst_str += 'g'
+                elif cube.bottom_color == color.white:
+                    tst_str += 'w'
+                elif cube.bottom_color == color.red:
+                    tst_str += 'r'
+                elif cube.bottom_color == color.blue:
+                    tst_str += 'b'
+                elif cube.bottom_color == color.black:
+                    tst_str += '-'
+                elif cube.bottom_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.bottom_color == color.orange:
+                    tst_str += 'o'
+                    # back color
+                if cube.back_color == color.green:
+                    tst_str += 'g'
+                elif cube.back_color == color.white:
+                    tst_str += 'w'
+                elif cube.back_color == color.red:
+                    tst_str += 'r'
+                elif cube.back_color == color.blue:
+                    tst_str += 'b'
+                elif cube.back_color == color.black:
+                    tst_str += '-'
+                elif cube.back_color == color.yellow:
+                    tst_str += 'y'
+                elif cube.back_color == color.orange:
+                    tst_str += 'o'
+    print(f"tst_str {tst_str}")
 
 
 
@@ -3005,35 +3119,7 @@ def input(key):
         print(f"solved in {str(solve_time)[-8:]}s.")
         
     elif key == 'm':
-        dir_list = s.set_upper_corners(r.cube_list, r.pos_list)
-        if dir_list != [] and dir_list is not None:
-            print(s.direction_list)
-            for dir in dir_list:
-                if dir == "turn_front_left":
-                    r.turn_front_left()
-                elif dir == "turn_front_right":
-                    r.turn_front_right()
-                elif dir == "turn_left_right":
-                    r.turn_left_right()
-                elif dir == "turn_left_left":
-                    r.turn_left_left()
-                elif dir == "turn_bottom_right":
-                    r.turn_bottom_right()
-                elif dir == "turn_bottom_left":
-                    r.turn_bottom_left()
-                elif dir == "turn_right_right":
-                    r.turn_right_right()
-                elif dir == "turn_right_left":
-                    r.turn_right_left()
-                elif dir == "turn_back_right":
-                    r.turn_back_right()
-                elif dir == "turn_back_left":
-                    r.turn_back_left()
-                elif dir == "turn_top_left":
-                    r.turn_top_left()
-                elif dir == "turn_top_right":
-                    r.turn_top_right()
-        
+        make_test_string(r.cube_list, r.pos_list)
 
 
 set_camera()
