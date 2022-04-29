@@ -126,26 +126,26 @@ class Solver:
         if not self.white_edges_solved:
             self.solve_white_edges(cube_list, pos_list)
             return self.direction_list
-        if self.white_edges_solved:
-            self.cube_solved = True
         elif not self.white_corners_solved:
             self.solve_white_corners(cube_list, pos_list)
             return self.direction_list
         elif not self.middle_edges_solved:
             self.solve_middle_edges(cube_list, pos_list)
             return self.direction_list
-        elif not self.upper_cross:
-            self.solve_upper_cross(cube_list, pos_list)
-            return self.direction_list
-        elif not self.upper_edges_solved:
-            self.solve_upper_edges(cube_list, pos_list)
-            return self.direction_list
-        elif not self.upper_corner_placement:
-            self.set_upper_corners(cube_list, pos_list)
-            return self.direction_list
-        elif not self.yellow_corners_solved:
-            self.solve_yellow_corners(cube_list, pos_list)
-            return self.direction_list
+        if self.middle_edges_solved:
+            self.cube_solved = True
+        # elif not self.upper_cross:
+        #     self.solve_upper_cross(cube_list, pos_list)
+        #     return self.direction_list
+        # elif not self.upper_edges_solved:
+        #     self.solve_upper_edges(cube_list, pos_list)
+        #     return self.direction_list
+        # elif not self.upper_corner_placement:
+        #     self.set_upper_corners(cube_list, pos_list)
+        #     return self.direction_list
+        # elif not self.yellow_corners_solved:
+        #     self.solve_yellow_corners(cube_list, pos_list)
+        #     return self.direction_list
 
         if self.yellow_corners_solved:
             self.cube_solved = True
@@ -1978,7 +1978,7 @@ class RubiksCube:
 
     def test_position(self):
         self.cube_list = list()
-        test_string = "ry--b-y---o-g-y-o-by----o-g---go-w--g--w--g-rw---r--g---r-y--o-w----rw---o--yb----gy--g-yr-b---o--b--r-o-w-b---w-b--rw-b"
+        test_string = "yr--g-g---y-r-b-y-go----g-r---go-w--g--w--g-rw---o--y---r-y--o-w----rw---y--bo----yb--g-oy-o---b--r--b-o-w-b---w-b--rw-b"
 
 
         re_list = re.findall('......', test_string)
@@ -2849,6 +2849,15 @@ class RubiksCube:
                 cube.left_color = org_front_color
                 cube.model = cube.ColorCube()
 
+
+
+
+
+app = Ursina()
+f = Facing()
+s = Solver()
+r = RubiksCube()
+
 def make_test_string(cube_list, pos_list):
     tst_str = ''
     position_list = [(0,0,0),
@@ -2966,20 +2975,12 @@ def make_test_string(cube_list, pos_list):
                     tst_str += 'o'
     print(f"tst_str {tst_str}")
 
-
-
-app = Ursina()
-f = Facing()
-s = Solver()
-r = RubiksCube()
-
 def set_camera():
     camera.position = (0 , 0)
     camera.fov = 32
 
 def update():
     f.get_facing_position(camera.world_position)
-
 
 def input(key):
     if key == '6':

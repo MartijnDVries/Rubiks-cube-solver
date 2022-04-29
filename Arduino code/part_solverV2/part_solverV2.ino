@@ -36,7 +36,7 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   {'-','-','r','w','-','b'}};
 
   // input string to put in cubeArray
-  char test_str[] = "gr--w-b---y-r-w-b-gy----r-b---oy-b--w--o--b-ow---b--o---b-w--r-g----ry---y--og----oy--g-wo-g---o--r--w-r-y-b---w-g--ry-g";
+  char test_str[] = "ry--b-b---o-b-w-o-br----o-g---yo-g--g--w--y-rg---y--b---y-o--g-y----wo---y--bo----wr--w-og-r---g--b--w-g-r-w---r-y--br-w";
 
   // set up variables for conversion(rotation / position) of the cubicles
   char orgColour = '-';
@@ -50,6 +50,8 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   byte edgeArray[4] = {0,0,0,0};
   byte cornerArray[4] = {0,0,0,0};
   byte middleArray[4] = {0,0,0,0};
+  byte upperArray[4] = {0,0,0,0};
+  byte upperCorner[4] = {0,0,0,0};
 
 
 void setup() {
@@ -86,7 +88,7 @@ void setup() {
   Serial.println(cubeArray[0]);
 
 
-  while (solveArray[1] != 1){
+  while (solveArray[4] != 1){
     if (solveArray[0] != 1){
       WhiteCross();
     }
@@ -95,6 +97,12 @@ void setup() {
     }
     else if (solveArray[2] != 1){
       MiddleLayer();
+    }
+    else if (solveArray[3] != 1){
+      YellowCross();
+    }
+    else if (solveArray[4] != 1){
+      UpperEdges();
     }
   }
 
@@ -1363,9 +1371,514 @@ void WhiteCorners(){
 
 void MiddleLayer(){
   if (middleArray[0] == 1 && middleArray[1] == 1 && middleArray[2] == 1 && middleArray[3] == 1){
-    solveArray[2] == 1;
+    solveArray[2] = 1;
   }
-  else{
-    Serial.println("Solving middle layer");
+  // Go through al the edges again to find the middle layer edges and place them accordingly
+    // Front bottom edge
+  if (cubeArray[1][0] == 'g'){
+    if (cubeArray[1][4] == 'r'){
+      BottomLeft(cubeArray);
+      RightLeft(cubeArray);
+      BottomRight(cubeArray);
+      RightRight(cubeArray);
+      BottomRight(cubeArray);
+      FrontRight(cubeArray);
+      BottomLeft(cubeArray);
+      FrontLeft(cubeArray);
+      middleArray[0] = 1;
+    }
+    else if (cubeArray[1][4] == 'o'){
+      BottomRight(cubeArray);
+      LeftRight(cubeArray);
+      BottomLeft(cubeArray);
+      LeftLeft(cubeArray);
+      BottomLeft(cubeArray);
+      FrontLeft(cubeArray);
+      BottomRight(cubeArray);
+      FrontRight(cubeArray);
+      middleArray[1] = 1;
+    }
+  }
+    // Left bottom edge
+  if (cubeArray[8][1] == 'o'){
+    if (cubeArray[8][4] == 'g'){
+      BottomLeft(cubeArray);
+      FrontLeft(cubeArray);
+      BottomRight(cubeArray);
+      FrontRight(cubeArray);
+      BottomRight(cubeArray);
+      LeftRight(cubeArray);
+      BottomLeft(cubeArray);
+      LeftLeft(cubeArray);
+      middleArray[1] = 1;
+    }
+    else if (cubeArray[8][4] == 'b'){
+      BottomRight(cubeArray);
+      BackRight(cubeArray);
+      BottomLeft(cubeArray);
+      BackLeft(cubeArray);
+      BottomLeft(cubeArray);
+      LeftLeft(cubeArray);
+      BottomRight(cubeArray);
+      LeftRight(cubeArray);
+      middleArray[3] = 1;
+    }
+  }
+    // Bottom right edge
+  if (cubeArray[9][2] == 'r'){
+    if (cubeArray[9][4] == 'b'){
+      BottomLeft(cubeArray);
+      BackLeft(cubeArray);
+      BottomRight(cubeArray);
+      BackRight(cubeArray);
+      BottomRight(cubeArray);
+      RightRight(cubeArray);
+      BottomLeft(cubeArray);
+      RightLeft(cubeArray);
+      middleArray[2] = 1;
+    }
+    else if (cubeArray[9][4] == 'g'){
+      BottomRight(cubeArray);
+      FrontRight(cubeArray);
+      BottomLeft(cubeArray);
+      FrontLeft(cubeArray);
+      BottomLeft(cubeArray);
+      RightLeft(cubeArray);
+      BottomRight(cubeArray);
+      RightRight(cubeArray);
+      middleArray[0] = 1;
+    }
+  }
+    // Bottom back edge
+  if (cubeArray[13][5] == 'b'){
+    if (cubeArray[13][4] == 'r'){
+      BottomRight(cubeArray);
+      RightRight(cubeArray);
+      BottomLeft(cubeArray);
+      RightLeft(cubeArray);
+      BottomLeft(cubeArray);
+      BackLeft(cubeArray);
+      BottomRight(cubeArray);
+      BackRight(cubeArray);
+      middleArray[2] = 1;
+    }
+    else if (cubeArray[13][4] == 'o'){
+      BottomLeft(cubeArray);
+      LeftLeft(cubeArray);
+      BottomRight(cubeArray);
+      LeftRight(cubeArray);
+      BottomRight(cubeArray);
+      BackRight(cubeArray);
+      BottomLeft(cubeArray);
+      BackLeft(cubeArray);
+      middleArray[3] = 1;
+    }
+  }
+    // Front left edge
+  if (cubeArray[3][0] == 'g' && cubeArray[3][1] == 'o'){
+    middleArray[1] = 1;
+  }
+  else if (cubeArray[3][0] == 'o' && cubeArray[3][1] == 'g'){
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    middleArray[1] = 1;
+  }
+  else if (cubeArray[3][1] == 'r' || cubeArray[3][1] == 'b' || cubeArray[3][1] == 'g' || cubeArray[3][1] == 'o'){
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+  }
+  // Front right edge
+  if (cubeArray[4][0] == 'g' && cubeArray[4][2] == 'r'){
+    middleArray[0] = 1;
+  }
+  else if (cubeArray[4][0] == 'r' && cubeArray[4][2] == 'g'){
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    middleArray[0] = 1;
+  }
+  else if (cubeArray[4][2] == 'r' || cubeArray[4][2] == 'g' || cubeArray[4][2] == 'b' || cubeArray[4][2] == 'o'){
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+  }
+  // Back left edge
+  if (cubeArray[15][5] == 'b' && cubeArray[15][1] == 'o'){
+    middleArray[3] = 1;
+  }
+  else if (cubeArray[15][5] == 'o' && cubeArray[15][1] == 'b'){
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    middleArray[3] = 1;
+  }
+  else if (cubeArray[15][5] == 'o' || cubeArray[15][5] == 'g' || cubeArray[15][5] == 'b' || cubeArray[15][5] == 'r'){
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+  }
+  // Back right edge
+  if (cubeArray[16][5] == 'b' && cubeArray[16][2] == 'r'){
+    middleArray[2] = 1;
+  }
+  else if (cubeArray[16][5] == 'r' && cubeArray[16][2] == 'b'){
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    middleArray[2] = 1;
+  }
+  else if (cubeArray[16][5] == 'b' || cubeArray[16][5] == 'g' || cubeArray[16][5] == 'r' || cubeArray[16][5] == 'o'){
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+  }
+  // In case nothing is solveable from te bottom layer we turn the bottom right once
+  BottomRight(cubeArray);
+}
+
+void YellowCross(){
+  // Edges have two orientations. In this function we orientate the yellow edges so that the yellow faces up
+  
+   // After solving the middle layer there are four different configurations on the yellow layer. 
+  // The yellow edges form a cross then we leave the function.
+  // The yellow edges form a L-shape
+    // L-shapes can be on four different sides
+  // The yellow edges form a line 
+  // Or the yellow edges form a dot ( only the middle piece is correct)
+  if (cubeArray[1][4] == 'y' && cubeArray[8][4] == 'y' && cubeArray[9][4] == 'y' && cubeArray[13][4] == 'y'){
+    solveArray[3] = 1;
+    return;
+  }
+  
+  // L shape and green is front
+  else if (cubeArray[9][4] == 'y' && cubeArray[13][4] == 'y'){
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    FrontLeft(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  // L shape and red is front
+  else if (cubeArray[13][4] == 'y' && cubeArray[8][4] == 'y'){
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    RightLeft(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  // L shape and blue is front
+  else if (cubeArray[8][4] == 'y' && cubeArray[1][4] == 'y'){
+    BackRight(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BackLeft(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  //L shape and orange is front
+  else if (cubeArray[1][4] == 'y' && cubeArray[9][4]){
+    FrontRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontRight(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  // Line blue and green are in the spot
+  else if (cubeArray[1][4] == 'y' && cubeArray[13][4] == 'y'){
+    RightRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  // Line orange and red are in the right spot
+  else if (cubeArray[8][4] == 'y' && cubeArray[9][4] == 'y'){
+    FrontRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    solveArray[3] = 1;
+    return;
+  }
+  // No shape, so dot, we apply the algorithm once and come back in the function (because it's nog solved)
+  else {
+    FrontRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    return;
+  }
+}
+
+void UpperEdges(){
+  // Set the yellow edges in the right position
+
+  // We first check which edges are already in the right position
+  if (cubeArray[1][0] == 'g'){
+    upperArray[0] = 1;
+  }
+  else {
+    upperArray[0] = 0;
+  }
+  if (cubeArray[8][1] == '0'){
+    upperArray[1] = 1;
+  }
+  else {
+    upperArray[1] = 0;
+  }
+  if (cubeArray[9][2] == 'r'){
+    upperArray[2] = 1;
+  }
+  else {
+    upperArray[2] = 0;
+  }
+  if (cubeArray[13][5] == 'b'){
+    upperArray[3] = 1;
+  }
+  else {
+    upperArray[3] = 0;
+  }
+
+  // If all edges are in the right position already we leave the function
+  if (upperArray[0] == 1 && upperArray[1] == 1 && upperArray[2] == 1 && upperArray[3] == 1){
+    solveArray[4] = 1;
+    return;
+  }
+
+  // There are always 2 edges in the right relative position, but the layer itself can not be in the right orientation
+  // This results in either 1 or 0 edges are in the absolute right position
+  // We rotate the layer till we find a configuration with two edges in the right position
+  else if (upperArray[0] == 0 && upperArray[1] == 0 && upperArray[2] == 0 && upperArray[3] == 0){
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 1 && upperArray[1] == 0 && upperArray[2] == 0 && upperArray[3] == 0){
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 1 && upperArray[2] == 0 && upperArray[3] == 0){
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 0 && upperArray[2] == 1 && upperArray[3] == 0){
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 0 && upperArray[2] == 0 && upperArray[3] == 1){
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 0 && upperArray[2] == 0 && upperArray[3] == 0){
+    BottomRight(cubeArray);
+    return;
+  }
+  // For every combination of the correct edges we write an algorithm
+  // If the correct edges are on the opposite sides we apply the algorithm once and leave the function
+  // By applying the algorithm once we assure that the next time we enter the function the correct edges will be
+  // on adjacent sides of the cube. From this position we can solve the upper edges with one algorithm
+  else if (upperArray[0] == 1 && upperArray[1] == 1 && upperArray[2] == 0 && upperArray[3] == 0){
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    solveArray[4] = 1;
+    return;
+  }
+  else if (upperArray[0] == 1 && upperArray[1] == 0 && upperArray[2] == 0 && upperArray[3] == 1){
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 1 && upperArray[1] == 0 && upperArray[2] == 1 && upperArray[3] == 0){
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    solveArray[4] = 1;
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 1 && upperArray[2] == 1 && upperArray[3] == 0){
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 1 && upperArray[2] == 0 && upperArray[3] == 1){
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    solveArray[4] = 1;
+    return;
+  }
+  else if (upperArray[0] == 0 && upperArray[1] == 0 && upperArray[2] == 1 && upperArray[3] == 1){
+    BackRight(cubeArray);
+    BottomRight(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomRight(cubeArray);
+    BottomRight(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    solveArray[4] = 1;
+    return;
+  }
+}
+
+void UpperCorners(){
+  // Set the upper corners in the right positions
+
+  // First check if the corners are accidentally already in the right spot
+  // A corner can have 3 orientations so we check all three for every corner
+  if (cubeArray[0][4] == 'y' && cubeArray[0][1] == 'o' && cubeArray[0][0] == 'g'
+  || cubeArray[0][4] =='g' && cubeArray[0][1] == 'y' && cubeArray[0][0] == 'o'
+  || cubeArray[0][4] == 'o' && cubeArray[0][1] == 'g' && cubeArray[0][0] == 'y'){
+    upperCorner[0] = 1;
+  }
+  if (cubeArray[2][4] == 'g' && cubeArray[2][0] == 'r' && cubeArray[2][2] == 'y'
+  || cubeArray[2][4] == 'r' && cubeArray[2][0] == 'y' && cubeArray[2][2] == 'g'
+  || cubeArray[2][4] == 'y'  && cubeArray[2][0] == 'g' && cubeArray[2][2] == 'r'){
+    upperCorner[1] = 1;
+  }
+  if (cubeArray[12][4] == 'y' && cubeArray[12][1] == 'o' && cubeArray[12][5] == 'b'
+  || cubeArray[12][4] ==  'b' && cubeArray[12][1] == 'y' && cubeArray[12][5] == 'o'
+  || cubeArray[12][4] == 'o' && cubeArray[12][1] == 'b' && cubeArray[12][5] == 'y'){
+    upperCorner[2] = 1;
+  }
+  if (cubeArray[14][4] == 'r' && cubeArray[14][5] == 'y' && cubeArray[14][2] == 'b'
+  || cubeArray[14][4] == 'b' && cubeArray[14][5] == 'r' && cubeArray[14][2] == 'y'
+  || cubeArray[14][4] == 'y' && cubeArray[14][5] == 'b' && cubeArray[14][2] == 'r'){
+    upperCorner[3] = 1;
   }
 }
