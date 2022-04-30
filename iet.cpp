@@ -52,6 +52,8 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
   byte middleArray[4] = {0,0,0,0};
   byte upperArray[4] = {0,0,0,0};
   byte upperCorner[4] = {0,0,0,0};
+  byte upperCorner2 [4] = {0,0,0,0};
+  int cornerTwists[4] = {0,0,0,0};
 
 
 void setup() {
@@ -88,7 +90,7 @@ void setup() {
   Serial.println(cubeArray[0]);
 
 
-  while (solveArray[4] != 1){
+  while (solveArray[6] != 1){
     if (solveArray[0] != 1){
       WhiteCross();
     }
@@ -103,6 +105,12 @@ void setup() {
     }
     else if (solveArray[4] != 1){
       UpperEdges();
+    }
+    else if (solveArray[5] != 1){
+      UpperCorners();
+    }
+    else if (solveArray[6] != 1){
+      UpperCorners2();
     }
   }
 
@@ -152,9 +160,9 @@ void FrontRight(char Array[][6]) {
     Array[i][3] = orgColour;
 
   }
-  // Rotate motor
-  stepper_5.move(50);
-  stepper_5.runToPosition();
+  // // Rotate motor
+  // stepper_5.move(50);
+  // stepper_5.runToPosition();
 }
 
 void FrontLeft(char Array[][6]){
@@ -179,9 +187,9 @@ void FrontLeft(char Array[][6]){
     Array[i][2] = Array[i][4];
     Array[i][4] = orgColour;
   }
-  // Rotate motor
-  stepper_5.move(-50);
-  stepper_5.runToPosition();
+  // // Rotate motor
+  // stepper_5.move(-50);
+  // stepper_5.runToPosition();
 }
 
 void RightRight(char Array[][6]){
@@ -216,8 +224,8 @@ void RightRight(char Array[][6]){
     Array[9][i] = convArray[6][i];
     Array[4][i] = convArray[7][i];
   }
-  stepper_2.move(-50);
-  stepper_2.runToPosition();
+  // stepper_2.move(-50);
+  // stepper_2.runToPosition();
 }
 
 void RightLeft(char Array[][6]){
@@ -249,8 +257,8 @@ void RightLeft(char Array[][6]){
     Array[11][i] = convArray[6][i];
     Array[7][i] = convArray[7][i];
   }
-  stepper_2.move(50);
-  stepper_2.runToPosition();
+  // stepper_2.move(50);
+  // stepper_2.runToPosition();
 }
 
 void LeftRight(char Array[][6]){
@@ -282,8 +290,8 @@ void LeftRight(char Array[][6]){
     Array[10][i] = convArray[6][i];
     Array[5][i] = convArray[7][i];
   }
-  stepper_1.move(50);
-  stepper_1.runToPosition();
+  // stepper_1.move(50);
+  // stepper_1.runToPosition();
 }
 
 void LeftLeft(char Array[][6]){
@@ -314,8 +322,8 @@ void LeftLeft(char Array[][6]){
     Array[8][i] = convArray[6][i];
     Array[12][i] = convArray[7][i];
   }
-  stepper_1.move(-50);
-  stepper_1.runToPosition();
+  // stepper_1.move(-50);
+  // stepper_1.runToPosition();
 }
 
 void BottomRight(char Array[][6]){
@@ -346,8 +354,8 @@ void BottomRight(char Array[][6]){
     Array[8][i] = convArray[6][i];
     Array[12][i] = convArray[7][i];
   }
-  stepper_4.move(50);
-  stepper_4.runToPosition();
+  // stepper_4.move(50);
+  // stepper_4.runToPosition();
 }
 
 void BottomLeft(char Array[][6]){
@@ -378,8 +386,8 @@ void BottomLeft(char Array[][6]){
     Array[9][i] = convArray[6][i];
     Array[2][i] = convArray[7][i];
   }
-  stepper_4.move(-50);
-  stepper_4.runToPosition();
+  // stepper_4.move(-50);
+  // stepper_4.runToPosition();
 }
 
 void TopRight(char Array[][6]){
@@ -410,8 +418,8 @@ void TopRight(char Array[][6]){
     Array[11][i] = convArray[6][i];
     Array[7][i] = convArray[7][i];
   }
-  stepper_3.move(50);
-  stepper_3.runToPosition();
+  // stepper_3.move(50);
+  // stepper_3.runToPosition();
 }
 
 void TopLeft(char Array[][6]){
@@ -442,8 +450,8 @@ void TopLeft(char Array[][6]){
     Array[10][i] = convArray[6][i];
     Array[17][i] = convArray[7][i];
   }
-  stepper_3.move(-50);
-  stepper_3.runToPosition();
+  // stepper_3.move(-50);
+  // stepper_3.runToPosition();
 }
 
 void BackRight(char Array[][6]){
@@ -474,8 +482,8 @@ void BackRight(char Array[][6]){
     Array[15][i] = convArray[6][i];
     Array[17][i] = convArray[7][i];
   }
-  stepper_6.move(50);
-  stepper_6.runToPosition();
+  // stepper_6.move(50);
+  // stepper_6.runToPosition();
 }
 
 void BackLeft(char Array[][6]){
@@ -506,8 +514,8 @@ void BackLeft(char Array[][6]){
     Array[16][i] = convArray[6][i];
     Array[14][i] = convArray[7][i];
   }
-  stepper_6.move(-50);
-  stepper_6.runToPosition();
+  // stepper_6.move(-50);
+  // stepper_6.runToPosition();
 }
 
 void WhiteCross(){
@@ -1722,7 +1730,7 @@ void UpperEdges(){
   else {
     upperArray[0] = 0;
   }
-  if (cubeArray[8][1] == '0'){
+  if (cubeArray[8][1] == 'o'){
     upperArray[1] = 1;
   }
   else {
@@ -1866,20 +1874,210 @@ void UpperCorners(){
   || cubeArray[0][4] == 'o' && cubeArray[0][1] == 'g' && cubeArray[0][0] == 'y'){
     upperCorner[0] = 1;
   }
+  else {
+    upperCorner[0] = 0;
+  }
   if (cubeArray[2][4] == 'g' && cubeArray[2][0] == 'r' && cubeArray[2][2] == 'y'
   || cubeArray[2][4] == 'r' && cubeArray[2][0] == 'y' && cubeArray[2][2] == 'g'
   || cubeArray[2][4] == 'y'  && cubeArray[2][0] == 'g' && cubeArray[2][2] == 'r'){
     upperCorner[1] = 1;
+  }
+  else {
+    upperCorner[1] = 0;
   }
   if (cubeArray[12][4] == 'y' && cubeArray[12][1] == 'o' && cubeArray[12][5] == 'b'
   || cubeArray[12][4] ==  'b' && cubeArray[12][1] == 'y' && cubeArray[12][5] == 'o'
   || cubeArray[12][4] == 'o' && cubeArray[12][1] == 'b' && cubeArray[12][5] == 'y'){
     upperCorner[2] = 1;
   }
+  else {
+    upperCorner[2] = 0;
+  }
   if (cubeArray[14][4] == 'r' && cubeArray[14][5] == 'y' && cubeArray[14][2] == 'b'
   || cubeArray[14][4] == 'b' && cubeArray[14][5] == 'r' && cubeArray[14][2] == 'y'
   || cubeArray[14][4] == 'y' && cubeArray[14][5] == 'b' && cubeArray[14][2] == 'r'){
     upperCorner[3] = 1;
+  }
+  else {
+    upperCorner[3] = 0;
+  }
+
+  if (upperCorner[0] == 1 && upperCorner[1] == 1 && upperCorner[2] == 1 && upperCorner[3] == 1){
+    solveArray[5] = 1;
+    return;
+  }
+  else if (upperCorner[0] == 0 && upperCorner[1] == 0 && upperCorner[2] == 0 && upperCorner[3] == 0){
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    RightRight(cubeArray);
+    return;
+  }
+  else if (upperCorner[0] == 1){
+    BottomRight(cubeArray);
+    LeftRight(cubeArray);
+    BottomLeft(cubeArray);
+    RightLeft(cubeArray);
+    BottomRight(cubeArray);
+    LeftLeft(cubeArray);
+    BottomLeft(cubeArray);
+    RightRight(cubeArray);
+    return;
+  }
+  else if (upperCorner[1] == 1){
+    BottomRight(cubeArray);
+    FrontRight(cubeArray);
+    BottomLeft(cubeArray);
+    BackLeft(cubeArray);
+    BottomRight(cubeArray);
+    FrontLeft(cubeArray);
+    BottomLeft(cubeArray);
+    BackRight(cubeArray);
+    return;
+  }
+  else if (upperCorner[2] == 1){
+    BottomRight(cubeArray);
+    BackRight(cubeArray);
+    BottomLeft(cubeArray);
+    FrontLeft(cubeArray);
+    BottomRight(cubeArray);
+    BackLeft(cubeArray);
+    BottomLeft(cubeArray);
+    FrontRight(cubeArray);
+    return;
+  }
+  else if (upperCorner[3] == 1){
+    BottomRight(cubeArray);
+    RightRight(cubeArray);
+    BottomLeft(cubeArray);
+    LeftLeft(cubeArray);
+    BottomRight(cubeArray);
+    RightLeft(cubeArray);
+    BottomLeft(cubeArray);
+    LeftRight(cubeArray);
+    return;
+  }
+}
+
+void UpperCorners2(){
+  // After the yellow corners are in the correct position they can in either of three
+  // orientations. In this function we put them in the right orientation en thereby
+  // solving the cube.
+
+  // Depending on which side the yellow side is facing the algorithm is applied 0, 2 or 4 times.
+  // We first determine which side the yellow side is facing and put in an array how many times we
+  // should do the algorithm.
+
+  if (cubeArray[0][4] == 'y'){
+    upperCorner2[0] = 1;
+    cornerTwists[0] = 0;
+  }
+  else if (cubeArray[0][1] == 'y'){
+    upperCorner2[0] = 0;
+    cornerTwists[0] = 2;
+  }
+  else if (cubeArray[0][0] == 'y'){
+    upperCorner2[0] = 0;
+    cornerTwists[0] = 4;
+  }
+  if (cubeArray[2][4] == 'y'){
+    upperCorner2[1] = 1;
+    cornerTwists[1] = 0;
+  }
+  else if (cubeArray[2][0] == 'y'){
+    upperCorner2[1] = 0;
+    cornerTwists[1] = 2;
+  }
+  else if (cubeArray[2][2] == 'y'){
+    upperCorner2[1] = 0;
+    cornerTwists[1] = 4;
+  }
+  if (cubeArray[12][4] == 'y'){
+    upperCorner2[2] = 1;
+    cornerTwists[2] = 0;
+  }
+  else if (cubeArray[12][5] == 'y'){
+    upperCorner2[2] = 0;
+    cornerTwists[2] = 2;
+  }
+  else if (cubeArray[12][1] == 'y'){
+    upperCorner2[2] = 0;
+    cornerTwists[2] = 4;
+  }
+  if (cubeArray[14][4] == 'y'){
+   upperCorner2[3] = 1;
+   cornerTwists[3] = 0;
+  }
+  else if (cubeArray[14][1] == 'y'){
+    upperCorner2[3] = 0;
+    cornerTwists[3] = 2;
+  }
+  else if (cubeArray[14][5] == 'y'){
+    upperCorner2[3] = 0;
+    cornerTwists[3] = 4;
+  }
+
+  if (upperCorner2[0] == 1 && upperCorner2[1] == 1 && upperCorner2[2] == 1 && upperCorner2[3] == 1){
+    solveArray[6] = 1;
+    return;
+  }
+  else {
+    if (upperCorner2[0] == 1){
+      BottomRight(cubeArray);
+    }
+    else {
+      for (int i = 0; i < cornerTwists[0]; i++){
+        LeftLeft(cubeArray);
+        TopLeft(cubeArray);
+        LeftRight(cubeArray);
+        TopRight(cubeArray);
+      }
+      BottomRight(cubeArray);
+    }
+    if (upperCorner2[3] == 1){
+      BottomRight(cubeArray);
+    }
+    else {
+      for (int i = 0; i < cornerTwists[3]; i++){
+        LeftLeft(cubeArray);
+        TopLeft(cubeArray);
+        LeftRight(cubeArray);
+        TopRight(cubeArray);
+      }
+      BottomRight(cubeArray);
+    }
+    if (upperCorner2[2] == 1){
+      BottomRight(cubeArray);
+    }
+    else {
+      for (int i = 0; i < cornerTwists[2]; i++){
+        LeftLeft(cubeArray);
+        TopLeft(cubeArray);
+        LeftRight(cubeArray);
+        TopRight(cubeArray);
+      }
+      BottomRight(cubeArray);
+    }
+    if (upperCorner2[1] == 1){
+      BottomRight(cubeArray);
+      solveArray[6] = 1;
+      return;
+    }
+    else {
+      for (int i = 0; i < cornerTwists[1]; i++){
+        LeftLeft(cubeArray);
+        TopLeft(cubeArray);
+        LeftRight(cubeArray);
+        TopRight(cubeArray);
+      }
+      BottomRight(cubeArray);
+      solveArray[6] = 1;
+      return;
+    }
   }
 }
 
