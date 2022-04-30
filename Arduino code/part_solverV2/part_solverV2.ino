@@ -37,13 +37,15 @@ char cubeArray[20][6] = { {'g','o','-','-','y','-'},
 
   // input string to put in cubeArray
   char test_str[] = "ry--b-b---o-b-w-o-br----o-g---yo-g--g--w--y-rg---y--b---y-o--g-y----wo---y--bo----wr--w-og-r---g--b--w-g-r-w---r-y--br-w";
-
+  
   // set up variables for conversion(rotation / position) of the cubicles
   char orgColour = '-';
   char orgArray[6]= {};
   char convArray[8][6]= {{}};
 
-
+  // set up for reading incomming data
+  String input;
+  byte input_string = 0;
 
   // Set up variables for the solver
   byte solveArray[7] = {0,0,0,0,0,0,0};
@@ -86,44 +88,54 @@ void setup() {
 
   // do changes
   setupcubeArray(test_str);
-  Serial.println("cube array before changes");
-  Serial.println(cubeArray[0]);
 
-
-  while (solveArray[6] != 1){
-    if (solveArray[0] != 1){
-      WhiteCross();
-    }
-    else if (solveArray[1] != 1){
-      WhiteCorners();
-    }
-    else if (solveArray[2] != 1){
-      MiddleLayer();
-    }
-    else if (solveArray[3] != 1){
-      YellowCross();
-    }
-    else if (solveArray[4] != 1){
-      UpperEdges();
-    }
-    else if (solveArray[5] != 1){
-      UpperCorners();
-    }
-    else if (solveArray[6] != 1){
-      UpperCorners2();
-    }  
-  }
-
-  // print cubearray after changes to test with python code
-  Serial.println("cube array after solve");
-  Serial.println(cubeArray[0]);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-
+  if (Serial.available() && input_string != 1){
+        input = Serial.readStringUntil('\n');
+        Serial.println(input.length());
+        if (input.length() == 120){
+          input_string = 1;
+        }
+    }
+  if (input_string == 1){
+    for (int i = 0; i < 120; i++){
+      test_str[i] = input[i];
+    }
+    setupcubeArray(test_str);
+    Serial.println("Cube array before changes");
+    Serial.println(cubeArray[0]);
+    while (solveArray[6] != 1){
+      if (solveArray[0] != 1){
+        WhiteCross();
+      }
+      else if (solveArray[1] != 1){
+        WhiteCorners();
+      }
+      else if (solveArray[2] != 1){
+        MiddleLayer();
+      }
+      else if (solveArray[3] != 1){
+        YellowCross();
+      }
+      else if (solveArray[4] != 1){
+        UpperEdges();
+      }
+      else if (solveArray[5] != 1){
+        UpperCorners();
+      }
+      else if (solveArray[6] != 1){
+        UpperCorners2();
+      }
+    }
+    Serial.println("Cube Array after changes");
+    Serial.println(cubeArray[0]);
+    Serial.println("Ready for input..");
+    input_string = 0;  
+  }
 }
 
 void setupcubeArray(char string[]){
