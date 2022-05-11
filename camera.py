@@ -69,8 +69,6 @@ while True:
     b,g,r = (frame[160,49])
     print(f"bgr = {b,g,r}")
     cv2.imshow("frame", frame)
-    cv2.imshow("frame2", imgDil)
-    cv2.imshow("frame3", imgblur)
 
 
     if cv2.waitKey(1) == ord('q'):

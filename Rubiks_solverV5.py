@@ -132,23 +132,22 @@ class Solver:
         elif not self.middle_edges_solved:
             self.solve_middle_edges(cube_list, pos_list)
             return self.direction_list
-        if self.middle_edges_solved:
-            self.cube_solved = True
-        # elif not self.upper_cross:
-        #     self.solve_upper_cross(cube_list, pos_list)
-        #     return self.direction_list
-        # elif not self.upper_edges_solved:
-        #     self.solve_upper_edges(cube_list, pos_list)
-        #     return self.direction_list
-        # elif not self.upper_corner_placement:
-        #     self.set_upper_corners(cube_list, pos_list)
-        #     return self.direction_list
-        # elif not self.yellow_corners_solved:
-        #     self.solve_yellow_corners(cube_list, pos_list)
-        #     return self.direction_list
-
+        elif not self.upper_cross:
+            self.solve_upper_cross(cube_list, pos_list)
+            return self.direction_list
+        elif not self.upper_edges_solved:
+            self.solve_upper_edges(cube_list, pos_list)
+            return self.direction_list
+        elif not self.upper_corner_placement:
+            self.set_upper_corners(cube_list, pos_list)
+            return self.direction_list
+        elif not self.yellow_corners_solved:
+            self.solve_yellow_corners(cube_list, pos_list)
+            return self.direction_list
         if self.yellow_corners_solved:
             self.cube_solved = True
+
+
 
     def solve_white_edges(self, cube_list, pos_list):
         # print("solving edges")
