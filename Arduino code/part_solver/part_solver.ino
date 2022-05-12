@@ -1710,7 +1710,7 @@ void YellowCross(){
     return;
   }
   //L shape and orange is front
-  else if (cubeArray[1][4] == 'y' && cubeArray[9][4]){
+  else if (cubeArray[1][4] == 'y' && cubeArray[9][4] == 'y'){
     Serial.println("L orange front");
     LeftRight(cubeArray);
     BottomRight(cubeArray);

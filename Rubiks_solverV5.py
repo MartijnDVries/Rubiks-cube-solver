@@ -1925,7 +1925,7 @@ class Solver:
 class RubiksCube:
     def __init__(self):
         self.pos_list = self.make_positions_list()
-        self.cube_list = self.test_position()
+        self.cube_list = self.set_cube()
 
 
     def make_positions_list(self):
@@ -1975,9 +1975,12 @@ class RubiksCube:
     
         return self.cube_list
 
-    def test_position(self):
+    def test_position(self, test_string):
+        for cube in self.cube_list:
+            destroy(cube)
+
+
         self.cube_list = list()
-        test_string = "go--y-g---y-g-r-y-go----g-r---go-w--g--w--g-rw---o--y---r-y--o-w----rw---o--yb----yb--r-yb-o---b--r--b-o-w-b---w-b--rw-b"
 
 
         re_list = re.findall('......', test_string)
@@ -2036,7 +2039,7 @@ class RubiksCube:
     def reset_cube(self):
         for cube in self.cube_list:
             destroy(cube)
-        cube_list = self.set_cube()
+        self.set_cube()
 
     # Front side is the green side.
     def turn_front_right(self):
@@ -2857,6 +2860,11 @@ f = Facing()
 s = Solver()
 r = RubiksCube()
 
+input_field = InputField(y=0.4)
+
+
+
+
 def make_test_string(cube_list, pos_list):
     tst_str = ''
     position_list = [(0,0,0),
@@ -2980,6 +2988,10 @@ def set_camera():
 
 def update():
     f.get_facing_position(camera.world_position)
+    if len(input_field.text) == 120:
+        r.test_position(input_field.text)
+        input_field.text = ''
+
 
 def input(key):
     if key == '6':
