@@ -1,66 +1,72 @@
-import cv2
+# import cv2
+#
+# import numpy
+#
+path = r"C:\Python\Woordzoeker Solver\WS_images\WS_image_4.png"
+#
+#
+#
+# img = cv2.imread(path)
+#
+# img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+#
+# while True:
+#
+#
+#
+#     cv2.imshow('Image', img)
+#     cv2.imshow('Img2', img_gray)
+#
+#
+#
+#     if cv2.waitKey(10) & 0xFF == ord('q'):
+#         break
+#
+
+#importing the required libraries
 import numpy as np
-
-def nothing(x):
-    pass
-
-# Load image
-cap = cv2.VideoCapture(1)
+import cv2
+import matplotlib.pyplot as plt
 
 
-# Create a window
-cv2.namedWindow('image')
+#here 0 means that the image is loaded in gray scale format
+gray_image = cv2.imread(path, 0)
 
-# Create trackbars for color change
-# Hue is from 0-179 for Opencv
-cv2.createTrackbar('HMin', 'image', 0, 179, nothing)
-cv2.createTrackbar('SMin', 'image', 0, 255, nothing)
-cv2.createTrackbar('VMin', 'image', 0, 255, nothing)
-cv2.createTrackbar('HMax', 'image', 0, 179, nothing)
-cv2.createTrackbar('SMax', 'image', 0, 255, nothing)
-cv2.createTrackbar('VMax', 'image', 0, 255, nothing)
 
-# Set default value for Max HSV trackbars
-cv2.setTrackbarPos('HMax', 'image', 179)
-cv2.setTrackbarPos('SMax', 'image', 255)
-cv2.setTrackbarPos('VMax', 'image', 255)
 
-# Initialize HSV min/max values
-hMin = sMin = vMin = hMax = sMax = vMax = 0
-phMin = psMin = pvMin = phMax = psMax = pvMax = 0
+ret,thresh_binary = cv2.threshold(gray_image,0,255,cv2.THRESH_BINARY)
+ret,thresh_binary_inv = cv2.threshold(gray_image,127,255,cv2.THRESH_BINARY_INV)
+ret,thresh_trunc = cv2.threshold(gray_image,127,255,cv2.THRESH_TRUNC)
+ret,thresh_tozero = cv2.threshold(gray_image,127,255,cv2.THRESH_TOZERO)
+ret,thresh_tozero_inv = cv2.threshold(gray_image,127,255,cv2.THRESH_TOZERO_INV)
 
-while(1):
-    ret, image = cap.read()
-    # Get current positions of all trackbarsq
-    hMin = cv2.getTrackbarPos('HMin', 'image')
-    sMin = cv2.getTrackbarPos('SMin', 'image')
-    vMin = cv2.getTrackbarPos('VMin', 'image')
-    hMax = cv2.getTrackbarPos('HMax', 'image')
-    sMax = cv2.getTrackbarPos('SMax', 'image')
-    vMax = cv2.getTrackbarPos('VMax', 'image')
+#DISPLAYING THE DIFFERENT THRESHOLDING STYLES
+names = ['Oiriginal Image','BINARY','THRESH_BINARY_INV','THRESH_TRUNC','THRESH_TOZERO','THRESH_TOZERO_INV']
+images = gray_image,thresh_binary,thresh_binary_inv,thresh_trunc,thresh_tozero,thresh_tozero_inv
 
-    # Set minimum and maximum HSV values to display
-    lower = np.array([hMin, sMin, vMin])
-    upper = np.array([hMax, sMax, vMax])
+for i in range(6):
+    plt.subplot(2,3,i+1),plt.imshow(images[i],'gray')
+    plt.title(names[i])
+    plt.xticks([]),plt.yticks([])
 
-    # Convert to HSV format and color threshold
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, lower, upper)
-    result = cv2.bitwise_and(image, image, mask=mask)
+plt.show()
 
-    # Print if there is a change in HSV value
-    if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax) ):
-        print("(hMin = %d , sMin = %d, vMin = %d), (hMax = %d , sMax = %d, vMax = %d)" % (hMin , sMin , vMin, hMax, sMax , vMax))
-        phMin = hMin
-        psMin = sMin
-        pvMin = vMin
-        phMax = hMax
-        psMax = sMax
-        pvMax = vMax
 
-    # Display result image
-    cv2.imshow('image', result)
-    if cv2.waitKey(10) & 0xFF == ord('q'):
-        break
 
-cv2.destroyAllWindows()
+
+def thresh_binary(img, lower, max):
+    return cv2.threshold(img, lower, max,cv2.THRESH_BINARY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

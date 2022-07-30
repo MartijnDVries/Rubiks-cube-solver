@@ -5,7 +5,7 @@ import imutils
 import cv2
 import sys
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 ret, image = cap.read()
 
 masking = True
@@ -27,7 +27,7 @@ def onMouse(event, x, y, flags, param):
 
 
 def setBlue():
-    cv2.setTrackbarPos('lower - red', 'RGB', 86)
+    cv2.setTrackbarPos('lower - red', 'RGB', 120)
     cv2.setTrackbarPos('lower - green', 'RGB', 31)
     cv2.setTrackbarPos('lower - blue', 'RGB', 4)
     cv2.setTrackbarPos('upper - red', 'RGB', 246)
@@ -56,7 +56,7 @@ if masking:
         # Capture frame-by-frame
         ret, image = cap.read()
 
-        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
         thrs1 = cv2.getTrackbarPos('lower - red', 'RGB')
         thrs2 = cv2.getTrackbarPos('lower - green', 'RGB')
@@ -95,7 +95,7 @@ if masking:
 
         # Display the resulting frame
         cv2.imshow('RGB', imageOut)
-        cv2.imshow("HALLOOOOO", hsv)
+        # cv2.imshow("HALLOOOOO", hsv)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             masking = False
             break
