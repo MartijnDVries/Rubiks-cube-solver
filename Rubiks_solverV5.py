@@ -2043,138 +2043,38 @@ class RubiksCube:
 
     # Front side is the green side.
     def turn_front_right(self):
-        for cube in self.cube_list:
-            if cube.position == self.pos_list[0,0,0]:
-                cube.position = self.pos_list[0,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[1,0,0]:
-                cube.position = self.pos_list[0,1,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,0,0]:
-                cube.position = self.pos_list[0,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[0,1,0]:
-                cube.position = self.pos_list[1,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,1,0]:
-                cube.position = self.pos_list[1,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[0,2,0]:
-                cube.position = self.pos_list[2,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[1,2,0]:
-                cube.position = self.pos_list[2,1,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,2,0]:
-                cube.position = self.pos_list[2,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.right_color
-                cube.right_color = cube.top_color
-                cube.top_color = cube.left_color
-                cube.left_color = org_bottom_color
-                cube.model = cube.ColorCube()
+        self.turn_right_right()
+        self.turn_left_right()
+        for turn in range(2):
+            self.turn_bottom_left()
+            self.turn_top_left()
+        self.turn_right_left()
+        self.turn_left_left()
+        self.turn_back_right()
+        self.turn_right_right()
+        self.turn_left_right()
+        for turn in range(2):
+            self.turn_bottom_left()
+            self.turn_top_right()
+        self.turn_right_left()
+        self.turn_left_left()
     
     def turn_front_left(self):
-        for cube in self.cube_list:
-            if cube.position == self.pos_list[0,0,0]:
-                cube.position = self.pos_list[2,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[1,0,0]:
-                cube.position = self.pos_list[2,1,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,0,0]:
-                cube.position = self.pos_list[2,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[0,1,0]:
-                cube.position = self.pos_list[1,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,1,0]:
-                cube.position = self.pos_list[1,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[0,2,0]:
-                cube.position = self.pos_list[0,0,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[1,2,0]:
-                cube.position = self.pos_list[0,1,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
-            elif cube.position == self.pos_list[2,2,0]:
-                cube.position = self.pos_list[0,2,0]
-                org_bottom_color = cube.bottom_color
-                cube.bottom_color = cube.left_color
-                cube.left_color = cube.top_color
-                cube.top_color = cube.right_color
-                cube.right_color = org_bottom_color
-                cube.model = cube.ColorCube()
+        self.turn_right_right()
+        self.turn_left_right()
+        for turn in range(2):
+            self.turn_bottom_left()
+            self.turn_top_left()
+        self.turn_right_left()
+        self.turn_left_left()
+        self.turn_back_left()
+        self.turn_right_right()
+        self.turn_left_right()
+        for turn in range(2):
+            self.turn_bottom_left()
+            self.turn_top_right()
+        self.turn_right_left()
+        self.turn_left_left()
     
     # Red side is the right-hand side
     def turn_right_right(self):
@@ -3132,6 +3032,9 @@ def input(key):
         
     elif key == 'm':
         make_test_string(r.cube_list, r.pos_list)
+
+    elif key == 't':
+        r.turn_front_right()
 
 
 set_camera()

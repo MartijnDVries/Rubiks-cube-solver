@@ -187,58 +187,44 @@ bool TestSolve(char testArr[], char solvedArr[]){
 
 void FrontRight(char Array[][6]) {
   // Turn the front of the cube right
-  for (int i = 0; i < 6; i++){
-    orgArray[i] = Array[5][i];
-    Array[5][i] = Array[0][i];
-    Array[0][i] = Array[2][i];
-    Array[2][i] = Array[7][i];
-    cubeArray[7][i] = orgArray[i];
-
-    orgArray[i] = Array[1][i];
-    Array[1][i] = Array[4][i];
-    Array[4][i] = Array[6][i];
-    Array[6][i] = Array[3][i];
-    Array[3][i] = orgArray[i];
-  }
-  // Rotate the colors
-  for (int i = 0; i < 8; i++){
-    orgColour = Array[i][1];
-    Array[i][1] = Array[i][4];
-    Array[i][4] = Array[i][2];
-    Array[i][2] = Array[i][3];
-    Array[i][3] = orgColour;
-
-  }
-  // Rotate motor
-  // stepper_5.move(50);
-  // stepper_5.runToPosition();
+  RightRight(Array);
+  LeftRight(Array);
+  BottomLeft(Array);
+  BottomLeft(Array);
+  TopLeft(Array);
+  TopLeft(Array);
+  RightLeft(Array);
+  LeftLeft(Array);
+  BackRight(Array);
+  RightRight(Array);
+  LeftRight(Array);
+  BottomLeft(Array);
+  BottomLeft(Array);
+  TopLeft(Array);
+  TopLeft(Array);
+  RightLeft(Array);
+  LeftLeft(Array);
 }
 
 void FrontLeft(char Array[][6]){
-  for (int i = 0; i < 6; i++){
-    orgArray[i] = Array[5][i];
-    Array[5][i] = Array[7][i];
-    Array[7][i] = Array[2][i];
-    Array[2][i] = Array[0][i];
-    cubeArray[0][i] = orgArray[i];
+  RightRight(Array);
+  LeftRight(Array);
+  BottomLeft(Array);
+  BottomLeft(Array);
+  TopLeft(Array);
+  TopLeft(Array);
+  RightLeft(Array);
+  LeftLeft(Array);
+  BackLeft(Array);
+  RightRight(Array);
+  LeftRight(Array);
+  BottomLeft(Array);
+  BottomLeft(Array);
+  TopLeft(Array);
+  TopLeft(Array);
+  RightLeft(Array);
+  LeftLeft(Array);
 
-    orgArray[i] = Array[1][i];
-    Array[1][i] = Array[3][i];
-    Array[3][i] = Array[6][i];
-    Array[6][i] = Array[4][i];
-    Array[4][i] = orgArray[i];
-  }
-  // Rotate the colors
-  for (int i = 0; i < 8; i++){
-    orgColour = Array[i][1];
-    Array[i][1] = Array[i][3];
-    Array[i][3] = Array[i][2];
-    Array[i][2] = Array[i][4];
-    Array[i][4] = orgColour;
-  }
-  // Rotate motor
-  // stepper_5.move(-50);
-  // stepper_5.runToPosition();
 }
 
 void RightRight(char Array[][6]){
