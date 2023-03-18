@@ -2027,10 +2027,10 @@ class RubiksCube:
 
         self.cube_list.append(Rubiks(position=self.pos_list[1,1,1]))
         self.cube_list.append(Rubiks(front_color=color.green, position=self.pos_list[1,1,0]))
-        self.cube_list.append(Rubiks(bottom_color=color.yellow, position=self.pos_list[1,0,1]))
-        self.cube_list.append(Rubiks(left_color=color.orange , position=self.pos_list[0,1,1]))
-        self.cube_list.append(Rubiks(right_color=color.red, position=self.pos_list[2,1,1]))
-        self.cube_list.append(Rubiks(top_color=color.white, position=self.pos_list[1,2,1]))
+        self.cube_list.append(Rubiks(bottom_color=color.white, position=self.pos_list[1,0,1]))
+        self.cube_list.append(Rubiks(left_color=color.red , position=self.pos_list[0,1,1]))
+        self.cube_list.append(Rubiks(right_color=color.orange, position=self.pos_list[2,1,1]))
+        self.cube_list.append(Rubiks(top_color=color.yellow, position=self.pos_list[1,2,1]))
         self.cube_list.append(Rubiks(back_color=color.blue, position=self.pos_list[1,1,2]))
 
         return self.cube_list
