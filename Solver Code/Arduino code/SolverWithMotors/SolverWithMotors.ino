@@ -1,13 +1,13 @@
 
 #include <Stepper.h>
 
-#define stepsPerRotation 1600
+const int stepsPerRotation = 1600;
 
 Stepper stepperTop = Stepper(stepsPerRotation, 3,4);
-Stepper stepperBottom = Stepper(stepsPerRotation, 5,6);
-Stepper stepperLeft = Stepper(stepsPerRotation, 7,8);
-Stepper stepperRight = Stepper(stepsPerRotation, 9,10);
-Stepper stepperBack = Stepper(stepsPerRotation, 12,13);
+Stepper stepperBottom = Stepper(stepsPerRotation, 6,5);
+Stepper stepperLeft = Stepper(stepsPerRotation, 8,7);
+Stepper stepperRight = Stepper(stepsPerRotation, 10, 9);
+Stepper stepperBack = Stepper(stepsPerRotation, 13,12);
 
 // Solved state of cube, each element is single block of the cube
 // front, left, right, top, bottom, back
@@ -55,15 +55,19 @@ char cubeArray[20][6] = { {'g','r','-','-','w','-'},
   int middleEdges[4] = {0,0,0,0};
   int yellowEdges[4] = {0,0,0,0};
   int yellowCornerPos[4] = {0,0,0,0};
-  int yellowCornerOr[4] = {0,0,0,0};
-  int cornerTwists[4] = {0,0,0,0};
 
   // Set flag for start solving
   bool solving = false;
   bool stop = false;
+  bool scrambled = false;
 
   int succescount = 0;
 
+  // Button pins
+  const int solveButtonPin = 11;
+  const int scrambleButtonPin = 2;
+  int solveButtonState = 0;
+  int scrambleButtonState = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -71,8 +75,11 @@ void setup() {
     Serial.println("CUBEARRAY");
     Serial.println();
     Serial.println(cubeArray[0]);
-
-
+    stepperTop.setSpeed(120);
+    stepperBottom.setSpeed(120);
+    stepperLeft.setSpeed(120);
+    stepperRight.setSpeed(120);
+    stepperBack.setSpeed(120);
     /////////// TEST ////////////////////
     /////////// TEST ////////////////////
 
@@ -83,10 +90,19 @@ void loop() {
 
 
   if (!stop){
-    scrambleCube();
-    Serial.println("SCRAMBLED CUBE");
-    Serial.println(cubeArray[0]);
-    solving = true;
+    scrambleButtonState = digitalRead(scrambleButtonPin);
+    solveButtonState = digitalRead(solveButtonPin);
+    if (scrambleButtonState == HIGH){
+      scrambleCube();
+      Serial.println("SCRAMBLED CUBE");
+      Serial.println(cubeArray[0]);
+      scrambled = true;
+      delay(100);
+    }
+    if (solveButtonState == HIGH && scrambled){
+      solving = true;
+      delay(100);
+    }
   }
   while (solving){
     if (solveArray[0] == 0){
@@ -99,10 +115,18 @@ void loop() {
       solveMiddleEdges();
     }
     else if (solveArray[3] == 0){
-      Serial.println(cubeArray[0]);
       YellowCross();
     }
-    if (solveArray[3] == 1){
+    else if (solveArray[4] == 0){
+      solveYellowEdges();
+    }
+    else if (solveArray[5] == 0){
+      solveYellowCornerPos();
+    }
+    else if (solveArray[6] == 0){
+      solveYellowCornerOr();
+    }
+    if (solveArray[6] == 1){
       Serial.println("SOLVED CUBE");
       Serial.println(cubeArray[0]);
       if (!testCube()){
@@ -110,12 +134,13 @@ void loop() {
         Serial.println("ERROR");
       }
       else{
-        succescount++;
-        Serial.print("SUCCESFULL SOLVE #");
-        Serial.println(succescount);
-        if (succescount == 100){
-          stop = true;
-        }
+        // succescount++;
+        // Serial.print("SUCCESFULL SOLVE #");
+        // Serial.println(succescount);
+        // if (succescount == 1000){
+        //   stop = true;
+        // }
+        scrambled = false;
         reset();
       }
       solving = false;
@@ -1731,8 +1756,6 @@ void solveWhiteCorners(){
       }
     }
   }
-  
-
 }
 void GreenRedCorner(int whitePos){
   if (whitePos == top){
@@ -2568,6 +2591,295 @@ void solveLshape(){
   RightLeft();
 }
 
+void solveYellowEdges(){
+  // The yellow edges are in the right orientation but the position is not considered in the last function
+  // in this function we solve the position of the yellow edges while keeping the orientation intact.
+  // There are always two edges which are (by grouptheory, dont ask me im not an mathematical genius) already
+  // in the right position. We find these two edges and solve the other two if necessary.
+
+  // First check if they are already solved. Indices are again 6, 10, 11, 18.
+
+
+
+  // if (yellowEdges[0] == 1 && yellowEdges[1] == 1 && yellowEdges[2] == 1 && yellowEdges[3] == 1){
+  //   solveArray[4] == 1;
+  //   return;
+  // }
+
+  // We know that two edges are already solved, but the position may be off. We count the correct positions
+  // from the array. If the count is less than two we rotate the top layer once and count again.
+  
+  int correctEdges = 0;
+  while (true){
+    if (cubeArray[6][front] == 'g'){
+      yellowEdges[0] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[0] = 0;
+    }
+    if (cubeArray[10][left] == 'r'){
+      yellowEdges[1] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[1] = 0;
+    }
+    if (cubeArray[11][right] == 'o'){
+      yellowEdges[2] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[3] = 0;
+    }
+    if (cubeArray[18][back] == 'b'){
+      yellowEdges[3] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[3] = 0;
+    }
+    if (correctEdges == 4){
+      solveArray[4] = 1;
+      return;
+    }
+    else if (correctEdges < 2){
+      correctEdges = 0;
+      TopRight();
+    }
+    else{
+      break;
+    } 
+  }
+  
+  // Now we have six different possible scenarios where 2 edges are solved. For each of te six we write an 
+  // algorithm to solve all the edges
+
+  // Yellow Edges array 0 = green, 1 = red, 2 = orange, 3 = blue
+
+
+  // Green/Red correct, swap Orange/Blue
+  if (yellowEdges[0] == 1 && yellowEdges[1] == 1){
+    swapEdge();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Green/Orange correct, swap Red/Blue
+  else if (yellowEdges[0] == 1 && yellowEdges[2] == 1){
+    TopRight();
+    swapEdge();
+    TopLeft();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Blue/Red correct, swap Green/Orange
+  else if (yellowEdges[1] == 1 && yellowEdges[3] == 1){
+    TopLeft();
+    swapEdge();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  //Blue/Orange correct, swap Green/Red 
+  else if (yellowEdges[2] == 1 && yellowEdges[3] == 1){
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopRight();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Blue/Green correct, swap Orange/Red
+  else if (yellowEdges[0] == 1 && yellowEdges[3] == 1){
+    swapEdge();
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Orange/Red correct, swap Green/Blue
+  else if (yellowEdges[1] == 1 && yellowEdges[2] == 1){
+    swapEdge();
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopLeft();
+    solveArray[4] = 1; 
+    return;
+  }
+}
+void swapEdge(){
+  LeftRight();
+  TopRight();
+  LeftLeft();
+  TopRight();
+  LeftRight();
+  TopRight();
+  TopRight();
+  LeftLeft();
+  TopRight();
+}
+
+void solveYellowCornerPos(){
+  // In this function we solve the yellow corners positions. Continuing from the last state either
+  // 0, 1 or 4 corners are in the correct position. This function has 1 algorithm.
+
+  // First we check how many corners are in the right position. They can be in 3 orientations so we have 
+  // to check for all these cases.
+
+  // Indices are 5, 7, 17, 19
+  // We have again an array 0=5(front left), 1=7(front right), 17=2(Back left), 19=3(Back right)
+
+  // Front left corner index = 5
+  if (cubeArray[5][front] == 'g' && cubeArray[5][top] == 'y'){
+    yellowCornerPos[0] = 1;
+  }
+  else if (cubeArray[5][front] == 'r' && cubeArray[5][top] == 'g'){
+    yellowCornerPos[0] = 1;
+  }
+  else if (cubeArray[5][front] == 'y' && cubeArray[5][top] == 'r'){
+    yellowCornerPos[0] = 1;
+  }
+  else{
+    yellowCornerPos[0] = 0;
+  }
+
+  // Front right corner index = 7
+  if (cubeArray[7][front] == 'g' && cubeArray[7][top] == 'y'){
+    yellowCornerPos[1] = 1;
+  }
+  else if (cubeArray[7][front] == 'y' && cubeArray[7][top] == 'o'){
+    yellowCornerPos[1] = 1;
+  }
+  else if (cubeArray[7][front] == 'o' && cubeArray[7][top] == 'g'){
+    yellowCornerPos[1] = 1;
+  }
+  else{
+    yellowCornerPos[1] = 0;
+  }
+
+  // Back Left corner index = 17
+  if (cubeArray[17][back] == 'b' && cubeArray[17][top] == 'y'){
+    yellowCornerPos[2] = 1;
+  }
+  else if (cubeArray[17][back] == 'y' && cubeArray[17][top] == 'r'){
+    yellowCornerPos[2] = 1;
+  }
+  else if (cubeArray[17][back] == 'r' && cubeArray[17][top] == 'b'){
+    yellowCornerPos[2] = 1;
+  }
+  else{
+    yellowCornerPos[2] = 0;
+  }
+
+  // Back right corner index = 19
+  if (cubeArray[19][back] == 'b' && cubeArray[19][top] == 'y'){
+    yellowCornerPos[3] = 1;
+  }
+  else if (cubeArray[19][back] == 'y' && cubeArray[19][top] == 'o'){
+    yellowCornerPos[3] = 1;
+  }
+  else if (cubeArray[19][back] == 'o' && cubeArray[19][top] == 'b'){
+    yellowCornerPos[3] = 1;
+  }
+  else{
+    yellowCornerPos[3] = 0;
+  }
+  
+  // Four correct corners is this function complete
+  if (yellowCornerPos[0] == 1 && yellowCornerPos[1] == 1 && yellowCornerPos[2] == 1 && yellowCornerPos[3] == 1){
+    solveArray[5] = 1;
+    return;
+  }
+
+  // Count if 0 or 1 correct corner
+  int correctCorner = 0;
+  for (int i = 0; i < 4; ++i){
+    if (yellowCornerPos[i] == 1){
+      correctCorner++;
+    }
+  }
+  if (correctCorner == 0){
+    swapCorners();
+    return;
+  }
+  else if (correctCorner == 1){
+    if (yellowCornerPos[0] == 1){
+      TopLeft();
+      swapCorners();
+      TopRight();
+      return;
+    }
+    else if (yellowCornerPos[1] == 1){
+      swapCorners();
+      return;
+    }
+    else if (yellowCornerPos[2] == 1){
+      TopRight();
+      TopRight();
+      swapCorners();
+      TopRight();
+      TopRight();
+      return;
+    }
+    else if (yellowCornerPos[3] == 1){
+      TopRight();
+      swapCorners();
+      TopLeft();
+      return;
+    }
+  }
+}
+void swapCorners(){
+  TopRight();
+  RightRight();
+  TopLeft();
+  LeftLeft();
+  TopRight();
+  RightLeft();
+  TopLeft();
+  LeftRight();
+}
+
+void solveYellowCornerOr(){
+  // In this final function we solve the corner orientation of the yellow corners.
+  // There is one algorithm, and dependent on the orientation of the yellow face we apply this 
+  // 0 (if already solved) 2 or 4 times.
+
+  // The Algorithm is applied from the TopRight corner. This is different the all the other functions
+  // where we started topleft or bottomleft. But this way I can understand the best what is happening
+
+  //Top right corner index = 7
+
+  for (int i = 0; i < 4; ++i){
+    if (cubeArray[7][front] == 'y'){
+      for (int j = 0; j < 4; j++){
+        RightLeft();
+        BottomLeft();
+        RightRight();
+        BottomRight();
+      }
+    }
+    else if (cubeArray[7][right] == 'y'){
+      for (int j = 0; j < 2; j++){
+        RightLeft();
+        BottomLeft();
+        RightRight();
+        BottomRight();
+      }
+    }
+    TopRight();
+  }
+  solveArray[6] = 1;
+}
 
 
 void reset(){
@@ -2580,8 +2892,6 @@ void reset(){
     middleEdges[i] = 0;
     yellowEdges[i] = 0;
     yellowCornerPos[i] = 0;
-    yellowCornerOr[i] = 0;
-    cornerTwists[i] = 0;
   }
 }
 
@@ -2650,6 +2960,74 @@ bool testMiddleEdges(){
     return true;
   }
 }
+bool testYellowCross(){
+  if (!(cubeArray[6][top] == 'y' && cubeArray[10][top] == 'y' && cubeArray[11][top] == 'y' && cubeArray[18][top] == 'y')){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+bool testYellowEdges(){
+  if (!cubeArray[6][front] == 'g'){
+    return false;
+  }
+  else if (!cubeArray[10][left] == 'r'){
+    return false;
+  }
+  else if (!cubeArray[11][right] == 'o'){
+    return false;
+  }
+  else if (!cubeArray[18][back] == 'b'){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+bool testYellowCornerPos(){
+  if (!(cubeArray[5][front] == 'g' && cubeArray[5][top] == 'y') 
+  && !(cubeArray[5][front] == 'r' && cubeArray[5][top] == 'g')
+  && !(cubeArray[5][front] == 'y' && cubeArray[5][top] == 'r')){
+    return false;
+  }
+  else if (!(cubeArray[7][front] == 'g' && cubeArray[7][top] == 'y')
+  && !(cubeArray[7][front] == 'y' && cubeArray[7][top] == 'o')
+  && !(cubeArray[7][front] == 'o' && cubeArray[7][top] == 'g')){
+    return false;
+  }
+  else if (!(cubeArray[17][back] == 'b' && cubeArray[17][top] == 'y')
+  && !(cubeArray[17][back] == 'y' && cubeArray[17][top] == 'r')
+  && !(cubeArray[17][back] == 'r' && cubeArray[17][top] == 'b')){
+    return false;
+  }
+  else if (!(cubeArray[19][back] == 'b' && cubeArray[19][top] == 'y')
+  && !(cubeArray[19][back] == 'y' && cubeArray[19][top] == 'o')
+  && !(cubeArray[19][back] == 'o' && cubeArray[19][top] == 'b')){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+bool testYellowCornerOr(){
+  if (!(cubeArray[5][front] == 'g' && cubeArray[5][top] == 'y')){
+    return false;
+  }
+  else if (!(cubeArray[7][front] == 'g' && cubeArray[7][top] == 'y')){
+    return false;
+  }
+  else if (!(cubeArray[17][back] == 'b' && cubeArray[7][top] == 'y')){
+    return false;
+  }
+  else if (!(cubeArray[17][back] == 'b' && cubeArray[7][top] == 'y')){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
 bool testCube(){
   if (!testWhiteCross()){
     return false;
@@ -2658,6 +3036,18 @@ bool testCube(){
     return false;
   }
   else if (!testMiddleEdges()){
+    return false;
+  }
+  else if (!testYellowCross()){
+    return false;
+  }
+  else if (!testYellowEdges()){
+    return false;
+  }
+  else if (!testYellowCornerPos()){
+    return false;
+  }
+  else if (!testYellowCornerOr()){
     return false;
   }
   else{
@@ -2699,7 +3089,7 @@ void RightRight(){
     cubeArray[9][i] = convArray[6][i];
     cubeArray[4][i] = convArray[7][i];
   }
-  // stepperRight.step(turnRight);
+  stepperRight.step(turnRight);
 }
 
 void RightLeft(){
@@ -2733,7 +3123,7 @@ void RightLeft(){
     cubeArray[11][i] = convArray[6][i];
     cubeArray[7][i] = convArray[7][i];
   }
-  // stepperRight.step(turnLeft);
+  stepperRight.step(turnLeft);
 }
 
 void LeftRight(){
@@ -2766,7 +3156,7 @@ void LeftRight(){
     cubeArray[10][i] = convArray[6][i];
     cubeArray[5][i] = convArray[7][i];
   }
-  // stepperLeft.step(turnRight);
+  stepperLeft.step(turnRight);
 }
 
 void LeftLeft(){
@@ -2799,7 +3189,7 @@ void LeftLeft(){
     cubeArray[8][i] = convArray[6][i];
     cubeArray[12][i] = convArray[7][i];
   }
-  // stepperLeft.step(turnLeft);
+  stepperLeft.step(turnLeft);
 }
 
 void BottomRight(){
@@ -2832,7 +3222,7 @@ void BottomRight(){
     cubeArray[8][i] = convArray[6][i];
     cubeArray[12][i] = convArray[7][i];
   }
-  // stepperBottom.step(turnRight);
+  stepperBottom.step(turnRight);
 }
 
 void BottomLeft(){
@@ -2865,7 +3255,7 @@ void BottomLeft(){
     cubeArray[9][i] = convArray[6][i];
     cubeArray[2][i] = convArray[7][i];
   }
-  // stepperBottom.step(turnLeft);
+  stepperBottom.step(turnLeft);
 }
 
 void TopRight(){
@@ -2898,7 +3288,7 @@ void TopRight(){
     cubeArray[11][i] = convArray[6][i];
     cubeArray[7][i] = convArray[7][i];
   }
-  // stepperTop.step(turnRight);
+  stepperTop.step(turnRight);
 }
 
 void TopLeft(){
@@ -2931,7 +3321,7 @@ void TopLeft(){
     cubeArray[10][i] = convArray[6][i];
     cubeArray[17][i] = convArray[7][i];
   }
-  // stepperTop.step(turnLeft);
+  stepperTop.step(turnLeft);
 }
 
 void BackRight(){
@@ -2964,7 +3354,7 @@ void BackRight(){
     cubeArray[15][i] = convArray[6][i];
     cubeArray[17][i] = convArray[7][i];
   }
-  // stepperBack.step(turnRight);
+  stepperBack.step(turnRight);
 }
 
 void BackLeft(){
@@ -2997,7 +3387,7 @@ void BackLeft(){
     cubeArray[16][i] = convArray[6][i];
     cubeArray[14][i] = convArray[7][i];
   }
-  // stepperBack.step(turnLeft);
+  stepperBack.step(turnLeft);
 }
 
 void FrontRight() {
@@ -3032,19 +3422,19 @@ void FrontRight() {
     cubeArray[7][i] = convArray[5][i];
   }
 
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
-  // stepperBack.step(turnRight);
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
+  stepperRight.step(turnRight);
+  stepperLeft.step(turnRight);
+  stepperBottom.step(turnHalve);
+  stepperTop.step(turnHalve);
+  stepperRight.step(turnLeft);
+  stepperLeft.step(turnLeft);
+  stepperBack.step(turnRight);
+  stepperRight.step(turnRight);
+  stepperLeft.step(turnRight);
+  stepperBottom.step(turnHalve);
+  stepperTop.step(turnHalve);
+  stepperRight.step(turnLeft);
+  stepperLeft.step(turnLeft);
 }
 
 void FrontLeft(){
@@ -3079,24 +3469,24 @@ void FrontLeft(){
     cubeArray[7][i] = convArray[2][i];
   }
 
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
-  // stepperBack.step(turnLeft);
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
+  stepperRight.step(turnRight);
+  stepperLeft.step(turnRight);
+  stepperBottom.step(turnHalve);
+  stepperTop.step(turnHalve);
+  stepperRight.step(turnLeft);
+  stepperLeft.step(turnLeft);
+  stepperBack.step(turnLeft);
+  stepperRight.step(turnRight);
+  stepperLeft.step(turnRight);
+  stepperBottom.step(turnHalve);
+  stepperTop.step(turnHalve);
+  stepperRight.step(turnLeft);
+  stepperLeft.step(turnLeft);
 }
 
 
 void scrambleCube(){
-  for (int i = 0; i <25; ++i){
+  for (int i = 0; i <17; ++i){
     int r = analogRead(A0) % 12;
     switch(r){
       case 0:

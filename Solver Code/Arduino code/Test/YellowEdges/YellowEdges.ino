@@ -99,10 +99,13 @@ void loop() {
       solveMiddleEdges();
     }
     else if (solveArray[3] == 0){
-      Serial.println(cubeArray[0]);
       YellowCross();
     }
-    if (solveArray[3] == 1){
+    else if (solveArray[4] == 0){
+      Serial.println(cubeArray[0]);
+      solveYellowEdges();
+    }
+    if (solveArray[4] == 1){
       Serial.println("SOLVED CUBE");
       Serial.println(cubeArray[0]);
       if (!testCube()){
@@ -1731,8 +1734,6 @@ void solveWhiteCorners(){
       }
     }
   }
-  
-
 }
 void GreenRedCorner(int whitePos){
   if (whitePos == top){
@@ -2568,6 +2569,143 @@ void solveLshape(){
   RightLeft();
 }
 
+void solveYellowEdges(){
+  // The yellow edges are in the right orientation but the position is not considered in the last function
+  // in this function we solve the position of the yellow edges while keeping the orientation intact.
+  // There are always two edges which are (by grouptheory, dont ask me im not an mathematical genius) already
+  // in the right position. We find these two edges and solve the other two if necessary.
+
+  // First check if they are already solved. Indices are again 6, 10, 11, 18.
+
+
+
+  // if (yellowEdges[0] == 1 && yellowEdges[1] == 1 && yellowEdges[2] == 1 && yellowEdges[3] == 1){
+  //   solveArray[4] == 1;
+  //   return;
+  // }
+
+  // We know that two edges are already solved, but the position may be off. We count the correct positions
+  // from the array. If the count is less than two we rotate the top layer once and count again.
+  
+  int correctEdges = 0;
+  while (true){
+    if (cubeArray[6][front] == 'g'){
+      yellowEdges[0] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[0] = 0;
+    }
+    if (cubeArray[10][left] == 'r'){
+      yellowEdges[1] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[1] = 0;
+    }
+    if (cubeArray[11][right] == 'o'){
+      yellowEdges[2] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[3] = 0;
+    }
+    if (cubeArray[18][back] == 'b'){
+      yellowEdges[3] = 1;
+      correctEdges++;
+    }
+    else{
+      yellowEdges[3] = 0;
+    }
+    if (correctEdges == 4){
+      solveArray[4] = 1;
+      return;
+    }
+    else if (correctEdges < 2){
+      correctEdges = 0;
+      TopRight();
+    }
+    else{
+      break;
+    } 
+  }
+  
+  // Now we have six different possible scenarios where 2 edges are solved. For each of te six we write an 
+  // algorithm to solve all the edges
+
+  // Yellow Edges array 0 = green, 1 = red, 2 = orange, 3 = blue
+
+
+  // Green/Red correct, swap Orange/Blue
+  if (yellowEdges[0] == 1 && yellowEdges[1] == 1){
+    swapEdge();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Green/Orange correct, swap Red/Blue
+  else if (yellowEdges[0] == 1 && yellowEdges[2] == 1){
+    TopRight();
+    swapEdge();
+    TopLeft();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Blue/Red correct, swap Green/Orange
+  else if (yellowEdges[1] == 1 && yellowEdges[3] == 1){
+    TopLeft();
+    swapEdge();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  //Blue/Orange correct, swap Green/Red 
+  else if (yellowEdges[2] == 1 && yellowEdges[3] == 1){
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopRight();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Blue/Green correct, swap Orange/Red
+  else if (yellowEdges[0] == 1 && yellowEdges[3] == 1){
+    swapEdge();
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopRight();
+    solveArray[4] = 1; 
+    return;
+  }
+
+  // Orange/Red correct, swap Green/Blue
+  else if (yellowEdges[1] == 1 && yellowEdges[2] == 1){
+    swapEdge();
+    TopRight();
+    TopRight();
+    swapEdge();
+    TopLeft();
+    solveArray[4] = 1; 
+    return;
+  }
+}
+void swapEdge(){
+  LeftRight();
+  TopRight();
+  LeftLeft();
+  TopRight();
+  LeftRight();
+  TopRight();
+  TopRight();
+  LeftLeft();
+  TopRight();
+}
+
 
 
 void reset(){
@@ -2650,6 +2788,31 @@ bool testMiddleEdges(){
     return true;
   }
 }
+bool testYellowCross(){
+  if (!(cubeArray[6][top] == 'y' && cubeArray[10][top] == 'y' && cubeArray[11][top] == 'y' && cubeArray[18][top] == 'y')){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+bool testYellowEdges(){
+  if (!cubeArray[6][front] == 'g'){
+    return false;
+  }
+  else if (!cubeArray[10][left] == 'r'){
+    return false;
+  }
+  else if (!cubeArray[11][right] == 'o'){
+    return false;
+  }
+  else if (!cubeArray[18][back] == 'b'){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
 bool testCube(){
   if (!testWhiteCross()){
     return false;
@@ -2658,6 +2821,12 @@ bool testCube(){
     return false;
   }
   else if (!testMiddleEdges()){
+    return false;
+  }
+  else if (!testYellowCross()){
+    return false;
+  }
+  else if (!testYellowEdges()){
     return false;
   }
   else{
