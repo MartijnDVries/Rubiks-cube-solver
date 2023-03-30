@@ -65,15 +65,40 @@ char cubeArray[20][6] = { {'g','r','-','-','w','-'},
 
 void setup() {
   // put your setup code here, to run once:
-    Serial.begin(115200);
-    Serial.println("CUBEARRAY");
-    Serial.println();
-    Serial.println(cubeArray[0]);
+  Serial.begin(115200);
+  Serial.println("CUBEARRAY");
+  Serial.println();
+  Serial.println(cubeArray[0]);
+  stepperTop.setSpeed(180);
+  stepperBottom.setSpeed(180);
+  stepperLeft.setSpeed(180);
+  stepperRight.setSpeed(180);
+  stepperBack.setSpeed(180);
+
+  for (int i = 0; i < 4; ++i){
+    stepperTop.step(turnRight);
+    delay(100);
+  }
+  for (int i = 0; i < 4; ++i){
+    stepperBottom.step(turnRight);
+    delay(100);
+  }
+  for (int i = 0; i < 4; ++i){
+    stepperLeft.step(turnRight);
+    delay(100);
+  }
+  for (int i = 0; i < 4; ++i){
+    stepperRight.step(turnRight);
+    delay(100);
+  }
+  for (int i = 0; i < 4; ++i){
+    stepperBack.step(turnRight);
+    delay(100);
+  }
 
 
     /////////// TEST ////////////////////
     /////////// TEST ////////////////////
-
 }
 
 void loop() {
@@ -82,6 +107,7 @@ void loop() {
 
   if (!stop){
     scrambleCube();
+    delay(5000);
     Serial.println("SCRAMBLED CUBE");
     Serial.println(cubeArray[0]);
     solving = true;
@@ -120,7 +146,7 @@ void loop() {
         succescount++;
         Serial.print("SUCCESFULL SOLVE #");
         Serial.println(succescount);
-        if (succescount == 1000){
+        if (succescount == 1){
           stop = true;
         }
         reset();
@@ -3071,7 +3097,7 @@ void RightRight(){
     cubeArray[9][i] = convArray[6][i];
     cubeArray[4][i] = convArray[7][i];
   }
-  // stepperRight.step(turnRight);
+   stepperRight.step(turnRight);
 }
 
 void RightLeft(){
@@ -3105,7 +3131,7 @@ void RightLeft(){
     cubeArray[11][i] = convArray[6][i];
     cubeArray[7][i] = convArray[7][i];
   }
-  // stepperRight.step(turnLeft);
+   stepperRight.step(turnLeft);
 }
 
 void LeftRight(){
@@ -3138,7 +3164,7 @@ void LeftRight(){
     cubeArray[10][i] = convArray[6][i];
     cubeArray[5][i] = convArray[7][i];
   }
-  // stepperLeft.step(turnRight);
+   stepperLeft.step(turnRight);
 }
 
 void LeftLeft(){
@@ -3171,7 +3197,7 @@ void LeftLeft(){
     cubeArray[8][i] = convArray[6][i];
     cubeArray[12][i] = convArray[7][i];
   }
-  // stepperLeft.step(turnLeft);
+   stepperLeft.step(turnLeft);
 }
 
 void BottomRight(){
@@ -3204,7 +3230,7 @@ void BottomRight(){
     cubeArray[8][i] = convArray[6][i];
     cubeArray[12][i] = convArray[7][i];
   }
-  // stepperBottom.step(turnRight);
+  stepperBottom.step(turnRight);
 }
 
 void BottomLeft(){
@@ -3237,7 +3263,7 @@ void BottomLeft(){
     cubeArray[9][i] = convArray[6][i];
     cubeArray[2][i] = convArray[7][i];
   }
-  // stepperBottom.step(turnLeft);
+   stepperBottom.step(turnLeft);
 }
 
 void TopRight(){
@@ -3270,7 +3296,7 @@ void TopRight(){
     cubeArray[11][i] = convArray[6][i];
     cubeArray[7][i] = convArray[7][i];
   }
-  // stepperTop.step(turnRight);
+   stepperTop.step(turnRight);
 }
 
 void TopLeft(){
@@ -3303,7 +3329,7 @@ void TopLeft(){
     cubeArray[10][i] = convArray[6][i];
     cubeArray[17][i] = convArray[7][i];
   }
-  // stepperTop.step(turnLeft);
+   stepperTop.step(turnLeft);
 }
 
 void BackRight(){
@@ -3336,7 +3362,7 @@ void BackRight(){
     cubeArray[15][i] = convArray[6][i];
     cubeArray[17][i] = convArray[7][i];
   }
-  // stepperBack.step(turnRight);
+   stepperBack.step(turnRight);
 }
 
 void BackLeft(){
@@ -3369,7 +3395,7 @@ void BackLeft(){
     cubeArray[16][i] = convArray[6][i];
     cubeArray[14][i] = convArray[7][i];
   }
-  // stepperBack.step(turnLeft);
+   stepperBack.step(turnLeft);
 }
 
 void FrontRight() {
@@ -3404,19 +3430,19 @@ void FrontRight() {
     cubeArray[7][i] = convArray[5][i];
   }
 
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
-  // stepperBack.step(turnRight);
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
+   stepperRight.step(turnRight);
+   stepperLeft.step(turnRight);
+   stepperBottom.step(turnHalve);
+   stepperTop.step(turnHalve);
+   stepperRight.step(turnLeft);
+   stepperLeft.step(turnLeft);
+   stepperBack.step(turnRight);
+   stepperRight.step(turnRight);
+   stepperLeft.step(turnRight);
+   stepperBottom.step(turnHalve);
+   stepperTop.step(turnHalve);
+   stepperRight.step(turnLeft);
+   stepperLeft.step(turnLeft);
 }
 
 void FrontLeft(){
@@ -3451,50 +3477,62 @@ void FrontLeft(){
     cubeArray[7][i] = convArray[2][i];
   }
 
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
-  // stepperBack.step(turnLeft);
-  // stepperRight.step(turnRight);
-  // stepperLeft.step(turnRight);
-  // stepperBottom.step(turnHalve);
-  // stepperTop.step(turnHalve);
-  // stepperRight.step(turnLeft);
-  // stepperLeft.step(turnLeft);
+   stepperRight.step(turnRight);
+   stepperLeft.step(turnRight);
+   stepperBottom.step(turnHalve);
+   stepperTop.step(turnHalve);
+   stepperRight.step(turnLeft);
+   stepperLeft.step(turnLeft);
+   stepperBack.step(turnLeft);
+   stepperRight.step(turnRight);
+   stepperLeft.step(turnRight);
+   stepperBottom.step(turnHalve);
+   stepperTop.step(turnHalve);
+   stepperRight.step(turnLeft);
+   stepperLeft.step(turnLeft);
 }
 
 
 void scrambleCube(){
-  for (int i = 0; i <25; ++i){
+  for (int i = 0; i < 17; ++i){
     int r = analogRead(A0) % 12;
     switch(r){
       case 0:
         FrontRight();
+        break;
       case 1:
         FrontLeft();
+        break;
       case 2:
         RightRight();
+        break;
       case 3: 
         RightLeft();
+        break;
       case 4:
         LeftRight();
+        break;
       case 5:
         LeftLeft();
+        break;
       case 6:
         BackRight();
+        break;
       case 7:
         BackLeft();
+        break;
       case 8:
         TopRight();
+        break;
       case 9:
         TopLeft();
+        break;
       case 10:
         BottomRight();
+        break;
       case 11:
-        BottomLeft();  
+        BottomLeft();
+        break;
     }
   }
   delay(100);
