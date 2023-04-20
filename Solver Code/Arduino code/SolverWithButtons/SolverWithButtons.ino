@@ -57,7 +57,7 @@ char cubeArray[20][6] = { {'g','r','-','-','w','-'},
   int yellowCornerPos[4] = {0,0,0,0};
 
   // Set flag for start solving
-  bool solving = false;
+  bool solved = true;
   bool stop = false;
   bool scrambled = false;
 
@@ -121,18 +121,21 @@ void loop() {
   scrambleButtonState = digitalRead(scrambleButtonPin);
 
   if (!stop){
-    if (!solving && scrambleButtonState == HIGH){
-      digitalWrite(scrambleButtonPin, HIGH);
+    if (solved && !scrambled && scrambleButtonState == HIGH){
+      digitalWrite(scrambleLedPin, HIGH);
       scrambleCube();
-      digitalWrite(scrambleButtonPin, LOW);
+      digitalWrite(scrambleLedPin, LOW);
       scrambled = true;
+      solved = false;
     }
-    if (scrambled && solveButtonState == HIGH){
-      solving = true;
+    if (!solved && scrambled && solveButtonState == HIGH){
+      digitalWrite(solveLedPin, HIGH);
       solveCube();
+      digitalWrite(solveLedPin, LOW);
     }
   }
 }
+
 
 
 void whiteCross(){
@@ -3523,7 +3526,7 @@ void scrambleCube(){
 }
 
 void solveCube(){
- while (solving){
+ while (!solved){
     if (solveArray[0] == 0){
       whiteCross();
     }
@@ -3543,7 +3546,6 @@ void solveCube(){
       solveYellowCornerPos();
     }
     else if (solveArray[6] == 0){
-      Serial.println(cubeArray[0]);
       solveYellowCornerOr();
     }
     if (solveArray[6] == 1){
@@ -3552,9 +3554,9 @@ void solveCube(){
         return;
       }
       else{
+        solved = true;
         reset();
       }
-      solving = false;
     }
   }
 }
